@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC16CA722C56D4E600115805 /* satellite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC16CA702C56D4E600115805 /* satellite.cpp */; };
+		BC16CA752C56D58C00115805 /* ground_station.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC16CA732C56D58C00115805 /* ground_station.cpp */; };
+		BC16CA782C56D59700115805 /* crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC16CA762C56D59700115805 /* crypto.cpp */; };
+		BC16CA7B2C56D5A700115805 /* udp_communication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC16CA792C56D5A700115805 /* udp_communication.cpp */; };
 		BC66B27E2C56ACE6005510C3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC66B27D2C56ACE6005510C3 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +27,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BC16CA6F2C56D36900115805 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		BC16CA702C56D4E600115805 /* satellite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = satellite.cpp; sourceTree = "<group>"; };
+		BC16CA712C56D4E600115805 /* satellite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = satellite.hpp; sourceTree = "<group>"; };
+		BC16CA732C56D58C00115805 /* ground_station.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ground_station.cpp; sourceTree = "<group>"; };
+		BC16CA742C56D58C00115805 /* ground_station.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ground_station.hpp; sourceTree = "<group>"; };
+		BC16CA762C56D59700115805 /* crypto.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crypto.cpp; sourceTree = "<group>"; };
+		BC16CA772C56D59700115805 /* crypto.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crypto.hpp; sourceTree = "<group>"; };
+		BC16CA792C56D5A700115805 /* udp_communication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = udp_communication.cpp; sourceTree = "<group>"; };
+		BC16CA7A2C56D5A700115805 /* udp_communication.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = udp_communication.hpp; sourceTree = "<group>"; };
 		BC66B27A2C56ACE6005510C3 /* CodefestAdAstra2024 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CodefestAdAstra2024; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC66B27D2C56ACE6005510C3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,11 +51,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC16CA862C56EC1600115805 /* keys */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = keys;
+			sourceTree = "<group>";
+		};
 		BC66B2712C56ACE6005510C3 = {
 			isa = PBXGroup;
 			children = (
 				BC66B27C2C56ACE6005510C3 /* CodefestAdAstra2024 */,
 				BC66B27B2C56ACE6005510C3 /* Products */,
+				BC66B28A2C56C958005510C3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +78,50 @@
 		BC66B27C2C56ACE6005510C3 /* CodefestAdAstra2024 */ = {
 			isa = PBXGroup;
 			children = (
-				BC66B27D2C56ACE6005510C3 /* main.cpp */,
+				BC16CA862C56EC1600115805 /* keys */,
+				BC66B2862C56C377005510C3 /* images */,
+				BC66B2852C56C1F0005510C3 /* include */,
+				BC66B2842C56C1E1005510C3 /* src */,
+				BC16CA6F2C56D36900115805 /* CMakeLists.txt */,
 			);
 			path = CodefestAdAstra2024;
+			sourceTree = "<group>";
+		};
+		BC66B2842C56C1E1005510C3 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				BC66B27D2C56ACE6005510C3 /* main.cpp */,
+				BC16CA762C56D59700115805 /* crypto.cpp */,
+				BC16CA702C56D4E600115805 /* satellite.cpp */,
+				BC16CA732C56D58C00115805 /* ground_station.cpp */,
+				BC16CA792C56D5A700115805 /* udp_communication.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		BC66B2852C56C1F0005510C3 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				BC16CA772C56D59700115805 /* crypto.hpp */,
+				BC16CA712C56D4E600115805 /* satellite.hpp */,
+				BC16CA742C56D58C00115805 /* ground_station.hpp */,
+				BC16CA7A2C56D5A700115805 /* udp_communication.hpp */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		BC66B2862C56C377005510C3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		BC66B28A2C56C958005510C3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +181,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC16CA782C56D59700115805 /* crypto.cpp in Sources */,
+				BC16CA752C56D58C00115805 /* ground_station.cpp in Sources */,
 				BC66B27E2C56ACE6005510C3 /* main.cpp in Sources */,
+				BC16CA7B2C56D5A700115805 /* udp_communication.cpp in Sources */,
+				BC16CA722C56D4E600115805 /* satellite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +311,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -253,6 +321,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
