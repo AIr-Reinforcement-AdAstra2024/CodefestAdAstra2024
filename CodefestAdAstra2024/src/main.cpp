@@ -3,8 +3,8 @@
 #include <cstdlib>
 // Declaraciones de librerías usadas
 
-#include "Satellite.h"
-#include "GroundStation.h"
+#include "Satellite.hpp"
+#include "GroundStation.hpp"
 
 // Declaraciones de funciones
 void encrypt(const std::string& input_path, const std::string& output_path);
