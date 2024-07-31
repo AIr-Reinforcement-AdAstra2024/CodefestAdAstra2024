@@ -63,7 +63,7 @@ getPublicKey(){
     return publicKey
 }
 
-generateRandomRSAKeys(){
+generateRSAKeys(){
 }
 
 decryptAESKey(encryptedAesKey, privateKey){
