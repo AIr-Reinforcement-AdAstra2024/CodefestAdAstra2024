@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "CodefestAdAstra2024",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CodefestAdAstra2024::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CodefestAdAstra2024-Debug-2d42ed545610d91a186d.json",
+					"name" : "CodefestAdAstra2024",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024/build",
+		"source" : "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}
