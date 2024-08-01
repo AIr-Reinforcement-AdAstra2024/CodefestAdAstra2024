@@ -72,7 +72,7 @@
     "cmake.debugConfig": {
         "args": [
             "encrypt",
-            "t.txt",
+            "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024/images/dog-5.jpg",
             "enc.j"
         ]
     }
