@@ -1,0 +1,80 @@
+GroundStation:
+
+string publicPrivatePath
+string publicKey
+string privateKey
+
+string imgKeysPath
+map<string, string> imgKeys
+
+
+GroundStation(){
+    loadPriPub()
+    loadImgKeys()
+}
+
+loadPriPub(){
+    pripubFile = open(publicPrivatePath)
+    if pripubFile.emtpy():
+        publicKey = None
+        privateKey = None
+    else:
+        line = pripubFile.read()
+        publicKey = line.split(",")[0]
+        privateKey = line.split(",")[1]
+}
+
+loadImgKeys(){
+    imgKeysFile = open(imgKeysPath)
+    for line in imgKeysFile:
+        imgName = line.split(",")[0]
+        aesKey = line.split(",")[1]
+        imgKeys.put(imgName, aesKey)
+}
+
+
+decrypt(input, output){
+    imgName = getImgName(input)
+    aesKey = imgKeys.get(imgName)
+    
+    decryptImg(input, aesKey)
+    
+}
+
+decryptImg(input, output, aesKey){
+    encryptedImg = load(input)
+    img = decypher(encryptedImg, aesKey)
+    save(img, output)
+}
+
+getImgName(path){
+    return path.split("/")[-1]
+}
+
+keyRenewalCriterion(){
+    num = randInt(0,100)
+    return num == 42    
+}
+
+getPublicKey(){
+    if publicKey == None or privateKey == None or keyRenewalCriterion():
+        this.publicKey, this.privateKey = generateRandomRSAKeys()
+
+    return publicKey
+}
+
+generateRSAKeys(){
+}
+
+decryptAESKey(encryptedAesKey, privateKey){
+}
+
+storeImgKeyPair(imgName, encryptedAesKey){
+    aesKey = decrypAEStKey(encryptedAesKey, privateKey)
+    imgKeys.put(imgName, aesKey)
+
+    imgKeysFile = open(imgKeysPath)
+
+    imgKeysFile.addline("imgName, aesKey")
+}
+

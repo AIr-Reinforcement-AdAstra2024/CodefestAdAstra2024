@@ -67,5 +67,14 @@
         "cinttypes": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp"
+    },
+    
+    "cmake.debugConfig": {
+        "args": [
+            "encrypt",
+            "t.txt",
+            "enc.j"
+        ]
     }
+    
 }
