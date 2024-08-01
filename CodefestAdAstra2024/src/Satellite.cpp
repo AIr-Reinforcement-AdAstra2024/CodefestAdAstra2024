@@ -3,6 +3,7 @@
 #include <string>
 #include <vector> 
 #include <filesystem>
+#include <fstream>
 
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
@@ -20,6 +21,26 @@ void Satellite::encrypt(const std::string& inputPath, const std::string& outputP
     cipher.encrypt_file(inputPath, outputPath, "password", "saltsalt");
 
     cipher.decrypt_file(outputPath, "newImg.p", "password", "saltsalt");
+}
+
+void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey){
+    
+    
+    
+    std::ifstream inputFile(inputPath, std::ios::binary);
+
+    inputFile.seekg(0, std::ios::end);
+    Cipher::uint fileSize = inputFile.tellg();
+    inputFile.seekg(0, std::ios::beg);
+
+    Cipher::uchar* data = new unsigned char[fileSize];
+    inputFile.read((char*) data, fileSize);
+
+    inputFile.close();
+
+
+    Cipher cipher("aes-256-cbc", "sha256");
+    std::string imgInBase64 = cipher.encode_base64(data, fileSize);
 }
 
 std::string Satellite::getImgName(const std::string& outputPath){

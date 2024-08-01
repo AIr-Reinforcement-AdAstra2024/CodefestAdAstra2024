@@ -17,7 +17,7 @@ class Satellite {
 
         std::string generateKey();
 
-        void encryptImg(std::string inputPath, std::string outputPath, std::string aesKey);
+        void encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey);
 
         std::string encryptKey(std::string publicKey, std::string aesKey);
 
