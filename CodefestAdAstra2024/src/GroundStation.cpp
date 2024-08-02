@@ -33,6 +33,7 @@ std::string GroundStation::getImgName(const std::string& outputPath){
 
 void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
     this->imgKeys.insert({imgName, encryptedKey});
+    
     insertLine("imgKeys.txt", imgName +","+ encryptedKey);
 }
 
