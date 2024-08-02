@@ -64,10 +64,7 @@ void GroundStation::loadImgKeys()
             splitString.push_back(item);    
         }
         this->imgKeys.insert({splitString.front(), splitString.back()});
-    }
-
-    
-    
+    }   
 }
 
 
