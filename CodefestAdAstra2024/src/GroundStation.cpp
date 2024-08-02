@@ -59,25 +59,8 @@ void GroundStation::loadImgKeys()
 
 
 void GroundStation::insertLine(const std::string& filename, const std::string& lineToInsert) {
-    std::ifstream inputFile(filename);
-    std::vector<std::string> lines;
-
-    
-    std::string line;
-    while (std::getline(inputFile, line)) {
-        lines.push_back(line);
-    }
-    inputFile.close();
-
-
-    lines.insert(lines.end() - 1, lineToInsert);
-
-    std::ofstream outputFile(filename);
-
-    for (const std::string& line : lines) {
-        outputFile << line << std::endl;
-    }
-    outputFile.close();
+    std::ofstream outputFile(filename, std::ios::app);
+    outputFile << lineToInsert << std::endl;
 }
 
 
