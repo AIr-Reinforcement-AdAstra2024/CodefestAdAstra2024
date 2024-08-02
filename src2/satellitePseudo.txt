@@ -1,0 +1,32 @@
+Satellite:
+
+encrypt (input, output){
+    aesKey = generateKey()
+
+    encryptImg(input, output, aesKey)
+    
+    
+    imgName = getImgName(output)
+
+    publicKey = groundStation.getPublicKey()
+    aesEncryptedKey = encryptKey(aesKey, publicKey)
+
+    groundStation.storeImgKeyPair(imgName, aesEncryptedKey)
+}
+
+encryptImg(input, output, aesKey){
+    img = load(input)
+    encryptedImg = cypher(img, aesKey)
+    save(encryptedImg, output)
+}
+
+generateKey(){
+    return generateRandomAESKey()
+}
+    
+
+getImgName(path){
+    return path.split("/")[-1]
+}
+
+
