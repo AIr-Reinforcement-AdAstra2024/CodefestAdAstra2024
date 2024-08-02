@@ -4,6 +4,7 @@
 #include <vector> 
 #include <filesystem>
 #include <fstream>
+#include <random>
 
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
@@ -16,7 +17,7 @@ void Satellite::setGroundStation(const GroundStation& groundStation){
 
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath){
     
-    std::string aesKey = "hola";
+    std::string aesKey = generateKey();
 
     encryptImg(inputPath, outputPath, aesKey);
 
@@ -57,4 +58,23 @@ std::string Satellite::getImgName(const std::string& outputPath){
     }
     return splitString.back();
 
+}
+
+std::string Satellite::generateKey()
+{
+    
+    std::string CHARACTERS= "zABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution <> distribution(1, CHARACTERS.size() - 1);
+    std::string random_string;
+    int length = distribution(generator);
+
+    for (int i = 0; i < length; ++i) {
+        random_string
+            += CHARACTERS[distribution(generator)];
+    }
+
+    return random_string;
 }

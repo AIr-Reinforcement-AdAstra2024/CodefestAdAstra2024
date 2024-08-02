@@ -13,9 +13,12 @@ GroundStation::GroundStation(){
 }
 
 void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
-    decryptImg(inputPath, outputPath, "hola");
+    std::string fileName = getImgName(inputPath);
+    std::string aesKey = this->imgKeys[fileName];
+
+    decryptImg(inputPath, outputPath,aesKey);
 }
-/*sacar el nombre*/
+
 
 std::string GroundStation::getPublicKey(){
     return this->publicKey ;
@@ -81,23 +84,4 @@ void GroundStation::decryptImg(std::string inputPath, std::string outputPath, st
 
     outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
 
-}
-
-
-std::string GroundStation::pathJoin(const std::string& p1, const std::string& p2)
-{
-    char sep = '/';
-    std::string tmp = p1;
-
-#ifdef _WIN32
-    sep = '\\';
-#endif
-
-    // Add separator if it is not included in the first path:
-    if (p1[p1.length() - 1] != sep) {
-        tmp += sep;
-        return tmp + p2;
-    } else {
-        return p1 + p2;
-    }
 }
