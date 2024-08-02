@@ -33,6 +33,8 @@ class GroundStation {
 
         std::string pathJoin(const std::string& p1, const std::string& p2);
 
+        void insertLine(const std::string& filename, const std::string& lineToInsert);
+
         void loadImgKeys(){
             
         }

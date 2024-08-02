@@ -24,7 +24,6 @@ int main(int argc, char* argv[]) {
     Satellite satellite;
     GroundStation groundStation;
 
-    satellite.setGroundStation(groundStation);
 
 
     if (operation == "encrypt") {
