@@ -64,8 +64,9 @@ std::string Satellite::generateKey()
     std::random_device rd;
     std::mt19937 generator(rd());
     std::uniform_int_distribution <> distribution(1, CHARACTERS.size() - 1);
+    std::uniform_int_distribution <> keyLengthGenerator(1, CHARACTERS.size()*4 - 1);
     std::string random_string;
-    int length = distribution(generator);
+    int length = keyLengthGenerator(generator);
 
     for (int i = 0; i < length; ++i) {
         random_string

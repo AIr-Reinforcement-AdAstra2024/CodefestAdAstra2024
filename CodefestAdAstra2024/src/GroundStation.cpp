@@ -37,12 +37,17 @@ std::string GroundStation::getImgName(const std::string& outputPath){
 void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
     this->imgKeys.insert({imgName, encryptedKey});
     
-    insertLine("imgKeys.txt", imgName +","+ encryptedKey);
+    char path[] = "groundStationSecrets imgKeys.txt";
+    path[20] = std::filesystem::path::preferred_separator;
+    insertLine(path, imgName +","+ encryptedKey);
 }
 
 void GroundStation::loadImgKeys()
 {
-    std::string path = "imgKeys.txt";
+    char path[] = "groundStationSecrets imgKeys.txt";
+    path[20] = std::filesystem::path::preferred_separator;
+
+    std::cout << path << std::endl;
     std::ifstream inputFile(path);
     std::string linea; 
     while (std::getline(inputFile, linea)) {
