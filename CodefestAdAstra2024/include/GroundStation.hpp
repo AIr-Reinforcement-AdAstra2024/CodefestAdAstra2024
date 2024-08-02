@@ -13,7 +13,8 @@ class GroundStation {
         void storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey);
 
         std::string getPublicKey();
-
+        
+        
      
 
     private:
@@ -33,9 +34,7 @@ class GroundStation {
 
         std::string pathJoin(const std::string& p1, const std::string& p2);
 
-        void loadImgKeys(){
-            
-        }
+        void loadImgKeys();
 };
 
 #endif 

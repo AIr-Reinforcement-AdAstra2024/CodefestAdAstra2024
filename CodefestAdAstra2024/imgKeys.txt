@@ -1,1 +1,1 @@
-dog-6.jpeg,hola
+dog-1.jpg,hola

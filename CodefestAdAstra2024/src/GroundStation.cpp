@@ -8,12 +8,14 @@
 #include "cipher.h"
 
 GroundStation::GroundStation(){
-    
+    loadImgKeys();
+
 }
 
 void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
     decryptImg(inputPath, outputPath, "hola");
 }
+/*sacar el nombre*/
 
 std::string GroundStation::getPublicKey(){
     return this->publicKey ;
@@ -31,13 +33,26 @@ std::string GroundStation::getImgName(const std::string& outputPath){
 
 void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
     this->imgKeys.insert({imgName, encryptedKey});
-
-
     std::ofstream outputFile("imgKeys.txt");
     outputFile << imgName +","+ encryptedKey+"\n";
-    
     outputFile.close();
+}
 
+void GroundStation::loadImgKeys()
+{
+    std::string path = "imgKeys.txt";
+    std::ifstream inputFile(path);
+    std::string linea; 
+    while (std::getline(inputFile, linea)) {
+        std::string item;
+        std::vector<std::string> splitString;
+        std::stringstream ss2(linea); 
+        while (std::getline(ss2, item, ',')) 
+        {
+            splitString.push_back(item);    
+        }
+        this->imgKeys.insert({splitString.front(), splitString.back()});
+    }
     
 }
 
