@@ -71,9 +71,9 @@
     
     "cmake.debugConfig": {
         "args": [
-            "decrypt",
-            "enc.j",
-            "chill.tiff"
+            "encrypt",
+            "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024/images/dog-6.jpeg",
+            "encryp.data"
         ]
     }
     

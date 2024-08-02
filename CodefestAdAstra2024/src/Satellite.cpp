@@ -15,7 +15,14 @@ void Satellite::setGroundStation(const GroundStation& groundStation){
 }
 
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath){
-    encryptImg(inputPath, outputPath, "hola");
+    
+    std::string aesKey = "hola";
+
+    encryptImg(inputPath, outputPath, aesKey);
+
+    std::string imgName = getImgName(inputPath);
+
+    this->groundStation.storeImgKeyPair(imgName, aesKey);
 }
 
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey){

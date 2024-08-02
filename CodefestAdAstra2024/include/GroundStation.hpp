@@ -6,9 +6,11 @@
 
 class GroundStation {
     public:
+        GroundStation();
+
         void decrypt(const std::string& inputPath, const std::string& outputPath);
 
-        void storeImgKeyPair(std::string imgName, std::string encryptedKey);
+        void storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey);
 
         std::string getPublicKey();
 
@@ -28,6 +30,12 @@ class GroundStation {
         void generateRSAKeys();
 
         std::string getImgName(const std::string& outputPath);
+
+        std::string pathJoin(const std::string& p1, const std::string& p2);
+
+        void loadImgKeys(){
+            
+        }
 };
 
 #endif 
