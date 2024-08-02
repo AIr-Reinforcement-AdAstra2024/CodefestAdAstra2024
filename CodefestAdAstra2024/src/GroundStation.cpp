@@ -14,9 +14,18 @@ GroundStation::GroundStation(){
 
 void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
     std::string fileName = getImgName(inputPath);
-    std::string aesKey = this->imgKeys[fileName];
 
-    decryptImg(inputPath, outputPath,aesKey);
+    std::map<std::string, std::string>::iterator iterator = this->imgKeys.find(fileName);
+
+    if (iterator != this->imgKeys.end()) {
+        std::string aesKey = this->imgKeys[fileName];
+        decryptImg(inputPath, outputPath,aesKey);
+    }
+    else{
+        throw std::runtime_error("File \""+ fileName + "\" not found !!!");
+    }
+
+    
 }
 
 

@@ -1,4 +1,4 @@
-#ifndef GROUNDSTATION_HPP
+    #ifndef GROUNDSTATION_HPP
 #define GROUNDSTATION_HPP
 
 #include <string>
@@ -23,8 +23,6 @@ class GroundStation {
         std::map<std::string, std::string> imgKeys;
 
         void decryptImg(std::string inputPath, std::string outputPath, std::string aesKey);
-    
-        std::string decryptAESKey(std::string encryptedAESKey);
         
         bool keyRenewalCriterion();
 
