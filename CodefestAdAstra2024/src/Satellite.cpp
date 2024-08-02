@@ -15,10 +15,7 @@ void Satellite::setGroundStation(const GroundStation& groundStation){
 }
 
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath){
-    
-    Satellite satellite;
-    satellite.encryptImg(inputPath, outputPath, "hola");
-
+    encryptImg(inputPath, outputPath, "hola");
 }
 
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey){
@@ -34,13 +31,12 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
 
     inputFile.close();
 
-
     Cipher cipher("aes-256-cbc", "sha256");
     std::string imgInBase64 = cipher.encode_base64(data, fileSize); 
 
-    std::string cipheredImg = cipher.encrypt(imgInBase64);
+    std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
 
-    
+    cipher.file_write(outputPath, encryptedImg, true);
 
 
 }
