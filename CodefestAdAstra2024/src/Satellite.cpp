@@ -20,7 +20,7 @@ void Satellite::encrypt(const std::string& inputPath, const std::string& outputP
 
     encryptImg(inputPath, outputPath, aesKey);
 
-    std::string imgName = getImgName(inputPath);
+    std::string imgName = getImgName(outputPath);
 
     this->groundStation.storeImgKeyPair(imgName, aesKey);
 }

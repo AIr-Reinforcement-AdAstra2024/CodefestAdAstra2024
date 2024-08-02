@@ -33,9 +33,7 @@ std::string GroundStation::getImgName(const std::string& outputPath){
 
 void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
     this->imgKeys.insert({imgName, encryptedKey});
-    std::ofstream outputFile("imgKeys.txt");
-    outputFile << imgName +","+ encryptedKey+"\n";
-    outputFile.close();
+    insertLine("imgKeys.txt", imgName +","+ encryptedKey);
 }
 
 void GroundStation::loadImgKeys()
@@ -53,9 +51,33 @@ void GroundStation::loadImgKeys()
         }
         this->imgKeys.insert({splitString.front(), splitString.back()});
     }
+
+    
     
 }
 
+
+void GroundStation::insertLine(const std::string& filename, const std::string& lineToInsert) {
+    std::ifstream inputFile(filename);
+    std::vector<std::string> lines;
+
+    
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        lines.push_back(line);
+    }
+    inputFile.close();
+
+
+    lines.insert(lines.end() - 1, lineToInsert);
+
+    std::ofstream outputFile(filename);
+
+    for (const std::string& line : lines) {
+        outputFile << line << std::endl;
+    }
+    outputFile.close();
+}
 
 
 void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey){
