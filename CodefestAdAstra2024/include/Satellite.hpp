@@ -10,8 +10,6 @@ class Satellite {
     public:
         void encrypt(const std::string& inputPath, const std::string& outputPath);
 
-        void setGroundStation(const GroundStation& groundStation);
-
     private:
         GroundStation groundStation;
 

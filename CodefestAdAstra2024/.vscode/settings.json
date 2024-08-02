@@ -72,8 +72,8 @@
     "cmake.debugConfig": {
         "args": [
             "decrypt",
-            "soygorda.gorda",
-            "img.tiff"
+            "encImg.txt",
+            "img.jpg"
         ]
     }
     
