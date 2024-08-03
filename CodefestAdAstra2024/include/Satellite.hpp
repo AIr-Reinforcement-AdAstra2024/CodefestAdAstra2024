@@ -17,8 +17,6 @@ class Satellite {
 
         void encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey);
 
-        std::string encryptKey(std::string publicKey, std::string aesKey);
-
         std::string getImgName(const std::string& outputPath);
 
 };

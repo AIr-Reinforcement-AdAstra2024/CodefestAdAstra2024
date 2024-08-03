@@ -72,8 +72,8 @@
     "cmake.debugConfig": {
         "args": [
             "decrypt",
-            "watever",
-            "randmo.enc"
+            "randmo.enc",
+            "img.tff"
         ]
     }
     
