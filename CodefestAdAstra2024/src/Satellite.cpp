@@ -35,7 +35,7 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
 
     inputFile.close();
 
-    Cipher cipher("aes-256-cbc", "sha256");
+    Cipher cipher("aes-256-ctr", "sha256");
     std::string imgInBase64 = cipher.encode_base64(data, fileSize); 
 
     std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);

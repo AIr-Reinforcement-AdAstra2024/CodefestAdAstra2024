@@ -85,7 +85,7 @@ void GroundStation::insertLine(const std::string& filename, const std::string& l
 
 void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey){
     
-    Cipher cipher("aes-256-cbc", "sha256");
+    Cipher cipher("aes-256-ctr", "sha256");
     std::string text = cipher.file_read(inputPath);
     
     std::string decryptedImg = cipher.decrypt(text, aesKey);
