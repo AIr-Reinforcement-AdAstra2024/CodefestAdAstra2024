@@ -35,3 +35,13 @@ En caso de tener Visual Studio:
 
 #### Otro 
 Se pueden encontrar otras formas de compilar el código si se busca ¿cómo ejecutar un _makefile_ en Windows?
+
+
+
+
+
+##### Realizado Por:
+1. Sergio Oliveros
+2. Daniel Álavarez
+3. Sebastian Urrea
+4. Andrés Duarte
