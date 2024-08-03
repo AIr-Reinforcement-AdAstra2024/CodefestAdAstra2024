@@ -32,6 +32,12 @@ En caso de tener Visual Studio:
 2. Ejecutar ```nmake```
 3. 4. El resultado será el ejecutable _CodefestAdAstra2024_
 
+#### _Experimental_
+Nosotros no logramos hacer funcionar esta opción, pero en caso de tener Cmake en windows, la siguiente opción puede serivr para crear unejecutable del proyecto. 
+1. Ejecutar el comando:
+```
+./build_and_run.bat
+```
 
 #### Otro 
 Se pueden encontrar otras formas de compilar el código si se busca ¿cómo ejecutar un _makefile_ en Windows?
