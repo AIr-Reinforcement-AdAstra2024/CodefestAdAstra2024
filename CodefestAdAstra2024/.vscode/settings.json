@@ -71,9 +71,9 @@
     
     "cmake.debugConfig": {
         "args": [
-            "encrypt",
-            "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024/images/dog-0.png",
-            "randmo.enc"
+            "decrypt",
+            "out.enc",
+            "img1.jpg"
         ]
     }
     
