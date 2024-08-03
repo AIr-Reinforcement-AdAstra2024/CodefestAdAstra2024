@@ -38,7 +38,7 @@ Nosotros no logramos hacer funcionar esta opción, pero en caso de tener Cmake e
 ```
 ./build_and_run.bat
 ```
-
+2. ingresar los parámetros de entrada para el proyecto.  
 #### Otro 
 Se pueden encontrar otras formas de compilar el código si se busca ¿cómo ejecutar un _makefile_ en Windows?
 
