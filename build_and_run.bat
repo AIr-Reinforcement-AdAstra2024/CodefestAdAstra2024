@@ -1,8 +1,22 @@
 @echo off
-cd CodefestAdAstra2024/build
-cmake --build .
-if %errorlevel% neq 0 exit /b %errorlevel%
-cd ..
-build\CodefestAdAstra2024.exe %*
-pause
 
+:: Cambiar al directorio de compilación
+cd CodefestAdAstra2024\build
+
+:: Generar los archivos de construcción con cmake
+cmake ..
+
+:: Compilar el proyecto
+make
+
+:: Verificar si el ejecutable fue creado
+if exist CodefestAdAstra2024.exe (
+    :: Mover el ejecutable al directorio superior
+    move CodefestAdAstra2024.exe ..\..\CodefestAdAstra2024.exe
+    cd ..\..
+
+    :: Ejecutar el programa con los argumentos pasados al script
+    CodefestAdAstra2024.exe %*
+) else (
+    echo Error: El ejecutable no fue generado. Revisa los errores de compilación.
+)
