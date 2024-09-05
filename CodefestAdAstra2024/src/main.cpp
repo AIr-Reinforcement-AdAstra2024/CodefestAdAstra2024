@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     std::string input_path = argv[2];
     std::string output_path = argv[3];
 
-
+    // Se crean las clases a utilizar para cifrar o descifrar
     Satellite satellite;
     GroundStation groundStation;
 

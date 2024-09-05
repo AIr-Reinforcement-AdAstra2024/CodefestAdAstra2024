@@ -1,4 +1,4 @@
-    #ifndef GROUNDSTATION_HPP
+#ifndef GROUNDSTATION_HPP
 #define GROUNDSTATION_HPP
 
 #include <string>

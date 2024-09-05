@@ -8,17 +8,20 @@
 #include "cipher.h"
 
 GroundStation::GroundStation(){
+    //Cada vez que se crea esta clase guarda en un mapa los nombres de los archivos cifrados y las llaves para descifrar cada uno.
     loadImgKeys();
 
 }
 
 void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
+    //Se obtiene el nombre del archivo cifrado
     std::string fileName = getImgName(inputPath);
-
+    //Se obtiene la llave del archivo cifrado (Se asume que dicha llave existe)
     std::map<std::string, std::string>::iterator iterator = this->imgKeys.find(fileName);
 
     if (iterator != this->imgKeys.end()) {
         std::string aesKey = this->imgKeys[fileName];
+        //En caso de tener la llave de la imagen, se descifra la imagen
         decryptImg(inputPath, outputPath,aesKey);
     }
     else{
@@ -34,6 +37,7 @@ std::string GroundStation::getPublicKey(){
 }
 
 std::string GroundStation::getImgName(const std::string& outputPath){
+    //Dado un path se otbiene el nombre del archivo
     std::stringstream ss(outputPath);
     std::string item;
     std::vector<std::string> splitString;
@@ -44,24 +48,28 @@ std::string GroundStation::getImgName(const std::string& outputPath){
 }
 
 void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
+    //Guarda la pareja de Nombre de imagen cifrada y llave, dentro de un mapa
     this->imgKeys.insert({imgName, encryptedKey});
 
+    //En caso de ser necesario crea una carpeta para persistir el mapa de imagenes y llaves 
     std::string directoryPath = "groundStationSecrets";
     if (!std::filesystem::exists(directoryPath)){
         std::filesystem::create_directory(directoryPath);
     }
 
-
+    //Guarda en el archvio imgKeys.txt las parejas Nombre imagen y llave 
     char path[] = "groundStationSecrets imgKeys.txt";
     path[20] = std::filesystem::path::preferred_separator;
     insertLine(path, imgName +","+ encryptedKey);
 }
 
 void GroundStation::loadImgKeys()
-{
+{   
+    //Abre el archivo de mapas
     char path[] = "groundStationSecrets imgKeys.txt";
     path[20] = std::filesystem::path::preferred_separator;
 
+    //Lee las líneas del archivo y las almacena dentro del mapa de nombres de imagenes y llaves
     std::ifstream inputFile(path);
     std::string linea; 
     while (std::getline(inputFile, linea)) {
@@ -78,26 +86,26 @@ void GroundStation::loadImgKeys()
 
 
 void GroundStation::insertLine(const std::string& filename, const std::string& lineToInsert) {
+    //abre un archivo y añande una string específico al final
     std::ofstream outputFile(filename, std::ios::app);
     outputFile << lineToInsert << std::endl;
 }
 
 
 void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey){
-    
+    //Crea una clase para poder descifrar la imagen 
     Cipher cipher("aes-256-ctr", "sha256");
+    //Lee la imagen cifrada y la almacena en un string
     std::string text = cipher.file_read(inputPath);
-    
+    //Decifra la imagen
     std::string decryptedImg = cipher.decrypt(text, aesKey);
-
+    //Se convierte la imagen a bytes
     Cipher::kv1_t dataNew = cipher.decode_base64(decryptedImg);
-
+    //Se extraen los bytes y el tamaño de ellos
     unsigned char* dataNewPointer = dataNew.first;
-
     unsigned int dataNewLength = dataNew.second; 
-
+    //Se guardan los bytes en el directorio especificado
     std::ofstream outputFile(outputPath, std::ios::binary);
-
     outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
 
 }

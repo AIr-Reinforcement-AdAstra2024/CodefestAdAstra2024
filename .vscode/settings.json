@@ -1,4 +1,6 @@
 {
+    "cmake.sourceDirectory": "/home/uwu/Documents/Andes/CODEFEST2024/CodefestAdAstra2024/CodefestAdAstra2024",
+    
     "files.associations": {
         "cctype": "cpp",
         "clocale": "cpp",
@@ -76,5 +78,6 @@
             "img1.jpg"
         ]
     }
+        
     
 }
