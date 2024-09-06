@@ -45,10 +45,16 @@ int main(int argc, char* argv[]) {
     loadKeysFromFile(filename, public_satellite_modulus, public_base_modulus, public_satellite_exponent, Ps);
     BN_set_word(Gs, 2);
     
-    // Funciones de modulos
-    satellite.give_me_info
-    groundStation.give_me_info
+    // Funciones de modulos infos 
+    std::vector<BIGNUM*> response_satellite = satellite.give_me_info(public_satellite_modulus, public_satellite_exponent, Ps, Gs);
+    std::vector<BIGNUM*> response_groundstation = groundStation.give_me_info(public_base_modulus, public_satellite_exponent, Ps, Gs);
     
+    // receive
+
+    satellite.receive_info(response_groundstation);
+    groundStation.receive_info(response_satellite);
+
+    // image encryption
 
     
     if (argc != 4) {
