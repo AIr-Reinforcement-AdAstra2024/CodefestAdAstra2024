@@ -2,6 +2,12 @@
 #include <string>
 #include <fstream>       
 #include <openssl/bn.h> 
+#include <openssl/evp.h> 
+#include <openssl/bio.h>
+#include <openssl/buffer.h>
+#include <openssl/err.h>
+#include <cstring>
+#include <sstream>
 #include <cstdlib>      
 
 // Declaraciones de librerías de proyecto
@@ -12,6 +18,10 @@
 
 BIGNUM *Ps = BN_new();
 BIGNUM *Gs = BN_new();
+
+// Generador comun (Gs) para valores Ps de 2048
+
+BN_set_word(Gs, 2);
 
 // llaves publicas RSA Satellite  (e) y (n)
 
