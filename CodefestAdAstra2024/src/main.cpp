@@ -22,10 +22,12 @@ BIGNUM *Gs = BN_new();
 BN_set_word(Gs, 2);
 
 // Llaves públicas RSA Satellite (e) y (n)
+
 BIGNUM* public_satellite_exponent = BN_new();
 BIGNUM* public_satellite_modulus = BN_new();
 
 // Llaves públicas RSA Base (n)
+
 BIGNUM* public_base_modulus = BN_new();
 
 // Declaraciones de funciones
@@ -45,7 +47,11 @@ int main(int argc, char* argv[]) {
 
     // Crear las clases a utilizar para cifrar o descifrar
     Satellite satellite;
-    GroundStation groundStation;
+    GroundStation groundStation; // 2 publicos
+
+    
+
+
 
     // Definir aquí cosas compartidas
     satellite.setGroundStation(groundStation);
@@ -67,7 +73,7 @@ void loadKeysFromFile(const std::string& fileName, BIGNUM* &n, BIGNUM* &n2, BIGN
     
     if (!file.is_open()) {
         std::cerr << "Error al abrir el archivo: " << fileName << std::endl;
-        exit(EXIT_FAILURE);  // Detenemos el programa si no se puede abrir el archivo
+        exit(EXIT_FAILURE); 
     }
     
     std::string line;
