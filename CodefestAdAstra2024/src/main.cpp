@@ -13,14 +13,14 @@
 BIGNUM *Ps = BN_new();
 BIGNUM *Gs = BN_new();
 
-// llaves publicas RSA Satellite 
+// llaves publicas RSA Satellite  (e) y (n)
 
-BIGNUM* e = BN_new();
-BIGNUM* n = BN_new();
+BIGNUM* public_satellite_exponent = BN_new();
+BIGNUM* public_satellite_modulus = BN_new();
 
-// llaves publicas RSA Base (e)
+// llaves publicas RSA Base (n)
 
-
+BIGNUM* public_base_modulus = BN_new();
 
 // Declaraciones de funciones
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite);
