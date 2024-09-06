@@ -55,6 +55,7 @@ int main(int argc, char* argv[]) {
     satellite.receive_info(response_groundstation, Ps, ctx);
     groundStation.receive_info(response_satellite, Ps, ctx);
 
+
     // image encryption
 
     
@@ -89,6 +90,7 @@ void loadKeysFromFile(const std::string& fileName, BIGNUM* &public_satellite_mod
     
     std::string line;
     while (getline(file, line)) {
+
         if (line.find("n_s = ") != std::string::npos) {
             std::string n_str = line.substr(line.find("n_s = ") + 6);
             BN_hex2bn(&public_satellite_modulus, n_str.c_str());

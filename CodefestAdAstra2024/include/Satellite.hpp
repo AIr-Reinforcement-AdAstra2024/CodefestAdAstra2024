@@ -8,6 +8,10 @@ class GroundStation;
 
 class Satellite {
     public:
+
+        Satellite();   // Constructor
+        ~Satellite();  // Destructor
+
         void encrypt(const std::string& inputPath, const std::string& outputPath);
 
         void setGroundStation(GroundStation & groundStation);
@@ -17,7 +21,7 @@ class Satellite {
         void receive_info(BIGNUM* response_groundstation, BIGNUM* Ps, BN_CTX* ctx);
 
     private:
-        GroundStation groundStation;
+        GroundStation* groundStation;
 
         BIGNUM* dh_secret_key;
         BIGNUM* dh_shared_key;

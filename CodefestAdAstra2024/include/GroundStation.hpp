@@ -8,7 +8,8 @@
 
 class GroundStation {
     public:
-        GroundStation();
+        GroundStation();    // Constructor
+        ~GroundStation();   // Destructor
 
         void decrypt(const std::string& inputPath, const std::string& outputPath);
 

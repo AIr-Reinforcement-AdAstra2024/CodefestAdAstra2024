@@ -16,9 +16,25 @@
 #include "cipher.h"
 #define MAX_NUMBER 100000000
 
-long int fixedSeed = 128123123114124;  // Definir la semilla fija
-std::mt19937 generator(fixedSeed); 
-std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUMBER]
+static long int fixedSeed = 128123123114124;  // Definir la semilla fija
+static std::mt19937 generator(fixedSeed); 
+static std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUMBER]
+
+Satellite::Satellite() {
+    // Inicializa las variables BIGNUM para Diffie-Hellman
+    dh_secret_key = BN_new();  // Asignar memoria para dh_secret_key
+    dh_shared_key = BN_new();  // Asignar memoria para dh_shared_key
+}
+
+Satellite::~Satellite() {
+    // Liberar la memoria asignada para dh_secret_key y dh_shared_key
+    if (dh_secret_key != nullptr) {
+        BN_free(dh_secret_key);  // Libera la memoria asignada a dh_secret_key
+    }
+    if (dh_shared_key != nullptr) {
+        BN_free(dh_shared_key);  // Libera la memoria asignada a dh_shared_key
+    }
+}
 
 void Satellite::generateDHKey()
 {
@@ -36,20 +52,18 @@ BIGNUM* Satellite::mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx) {
 }
 
 BIGNUM* Satellite::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
+    generateDHKey();
     return mod_exp(Gs, this->dh_secret_key, Ps, ctx);
 }
 
 void Satellite::receive_info(BIGNUM* response_groundstation, BIGNUM* Ps, BN_CTX* ctx){
     // Guardar la llave pública del GroundStation
     this->dh_shared_key = mod_exp(response_groundstation, this->dh_secret_key, Ps, ctx);
-}
-
-void print_openssl_error() {
-    ERR_print_errors_fp(stderr);
+    std::cout << "Satellite: Llave compartida: " << BN_bn2dec(this->dh_shared_key) << std::endl;
 }
 
 void Satellite::setGroundStation(GroundStation & groundStation){
-    this->groundStation = groundStation;
+    this->groundStation = &groundStation;
 }
 
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath){
@@ -60,7 +74,7 @@ void Satellite::encrypt(const std::string& inputPath, const std::string& outputP
     //Se extrae el nombre del archivo cifrado 
     std::string imgName = getImgName(outputPath);
     //Se comunica la llave y el nombre del archivo cifrado para que posteriormente se pueda decifrar
-    this->groundStation.storeImgKeyPair(imgName, aesKey);
+    this->groundStation->storeImgKeyPair(imgName, aesKey);
 }
 
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey){
@@ -122,36 +136,36 @@ std::string Satellite::generateKey()
     return random_string;
 }
 
-std::string GroundStation::desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n) {
-    BN_CTX* ctx = BN_CTX_new();
-    std::string resultado;
+// std::string Satellite::desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n) {
+//     BN_CTX* ctx = BN_CTX_new();
+//     std::string resultado;
 
-    for (auto& enc : encrypted_msg) {
-        BIGNUM* decrypted = BN_new();
-        BN_mod_exp(decrypted, enc, d, n, ctx); 
-        resultado += static_cast<char>(BN_get_word(decrypted));
-        BN_free(decrypted);
-    }
+//     for (auto& enc : encrypted_msg) {
+//         BIGNUM* decrypted = BN_new();
+//         BN_mod_exp(decrypted, enc, d, n, ctx); 
+//         resultado += static_cast<char>(BN_get_word(decrypted));
+//         BN_free(decrypted);
+//     }
 
-    BN_CTX_free(ctx);
-    return resultado;
-}
+//     BN_CTX_free(ctx);
+//     return resultado;
+// }
 
-std::vector<BIGNUM*> encriptarRSA(std::string msg, BIGNUM* e, BIGNUM* n){
-    BN_CTX* ctx = BN_CTX_new();
-    std::vector<BIGNUM*> resultado;
+// std::vector<BIGNUM*> Satellite::encriptarRSA(std::string msg, BIGNUM* e, BIGNUM* n){
+//     BN_CTX* ctx = BN_CTX_new();
+//     std::vector<BIGNUM*> resultado;
 
-    for (char c : msg) {
-        BIGNUM* m = BN_new();
-        BIGNUM* encrypted = BN_new();
+//     for (char c : msg) {
+//         BIGNUM* m = BN_new();
+//         BIGNUM* encrypted = BN_new();
 
-        BN_set_word(m, c); // Convertir el carácter a BIGNUM
-        BN_mod_exp(encrypted, m, e, n, ctx); // Realizar la encriptación: c^e mod n
+//         BN_set_word(m, c); // Convertir el carácter a BIGNUM
+//         BN_mod_exp(encrypted, m, e, n, ctx); // Realizar la encriptación: c^e mod n
 
-        resultado.push_back(encrypted);
-        BN_free(m);
-    }
+//         resultado.push_back(encrypted);
+//         BN_free(m);
+//     }
 
-    BN_CTX_free(ctx);
-    return resultado;
-}
+//     BN_CTX_free(ctx);
+//     return resultado;
+// }
