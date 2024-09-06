@@ -3,9 +3,21 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <random>
 
 #include "GroundStation.hpp"
 #include "cipher.h"
+
+#define MAX_NUMBER 100000000
+
+long int fixedSeed = 128123123114124;  // Definir la semilla fija
+std::mt19937 generator(fixedSeed); 
+std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUMBER]
+
+void GroundStation::generateDHKey()
+{
+    int satellite_personalkey = distribution(generator);
+}
 
 GroundStation::GroundStation(){
     //Cada vez que se crea esta clase guarda en un mapa los nombres de los archivos cifrados y las llaves para descifrar cada uno.

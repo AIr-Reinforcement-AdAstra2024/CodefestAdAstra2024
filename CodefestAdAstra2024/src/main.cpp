@@ -16,7 +16,7 @@
 
 // Llaves públicas Diffie-Hellman
 BIGNUM *Ps = BN_new();
-BIGNUM *Gs = BN_new();
+BIGNUM *Gs = BN_new(); 
 
 // Llaves públicas RSA Satellite (e) y (n)
 
@@ -33,6 +33,24 @@ void encrypt(const std::string& input_path, const std::string& output_path, Sate
 void decrypt(const std::string& input_path, const std::string& output_path, GroundStation& groundStation);
 
 int main(int argc, char* argv[]) {
+    // Crear las clases a utilizar para cifrar o descifrar
+    Satellite satellite;
+    GroundStation groundStation; // 2 publicos
+
+
+    // Definir aquí cosas compartidas
+
+    satellite.setGroundStation(groundStation);
+    std::string filename = "claves.txt";
+    loadKeysFromFile(filename, public_satellite_modulus, public_base_modulus, public_satellite_exponent, Ps);
+    BN_set_word(Gs, 2);
+    
+    // Funciones de modulos
+    satellite.give_me_info
+    groundStation.give_me_info
+    
+
+    
     if (argc != 4) {
         std::cerr << "Uso: " << argv[0] << " <operation> <input_path> <output_path>" << std::endl;
         return 1;
@@ -41,17 +59,6 @@ int main(int argc, char* argv[]) {
     std::string operation = argv[1];
     std::string input_path = argv[2];
     std::string output_path = argv[3];
-
-    // Crear las clases a utilizar para cifrar o descifrar
-    Satellite satellite;
-    GroundStation groundStation; // 2 publicos
-
-    
-
-
-
-    // Definir aquí cosas compartidas
-    satellite.setGroundStation(groundStation);
 
     if (operation == "encrypt") {
         encrypt(input_path, output_path, satellite);
@@ -92,6 +99,7 @@ void loadKeysFromFile(const std::string& fileName, BIGNUM* &public_satellite_mod
     
     file.close();  // Cerrar el archivo después de leerlo
 }
+
 
 void print_openssl_error() {
     ERR_print_errors_fp(stderr);
