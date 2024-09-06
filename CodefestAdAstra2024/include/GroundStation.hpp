@@ -24,8 +24,6 @@ class GroundStation {
         std::map<std::string, std::string> imgKeys;
 
         void decryptImg(std::string inputPath, std::string outputPath, std::string aesKey);
-        
-        bool keyRenewalCriterion();
 
         void generateRSAKeys();
 
