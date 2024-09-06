@@ -107,5 +107,38 @@ void GroundStation::decryptImg(std::string inputPath, std::string outputPath, st
     //Se guardan los bytes en el directorio especificado
     std::ofstream outputFile(outputPath, std::ios::binary);
     outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
+}
 
+std::string GroundStation::desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n) {
+    BN_CTX* ctx = BN_CTX_new();
+    std::string resultado;
+
+    for (auto& enc : encrypted_msg) {
+        BIGNUM* decrypted = BN_new();
+        BN_mod_exp(decrypted, enc, d, n, ctx); 
+        resultado += static_cast<char>(BN_get_word(decrypted));
+        BN_free(decrypted);
+    }
+
+    BN_CTX_free(ctx);
+    return resultado;
+}
+
+std::vector<BIGNUM*> encriptarRSA(std::string msg, BIGNUM* e, BIGNUM* n){
+    BN_CTX* ctx = BN_CTX_new();
+    std::vector<BIGNUM*> resultado;
+
+    for (char c : msg) {
+        BIGNUM* m = BN_new();
+        BIGNUM* encrypted = BN_new();
+
+        BN_set_word(m, c); // Convertir el carácter a BIGNUM
+        BN_mod_exp(encrypted, m, e, n, ctx); // Realizar la encriptación: c^e mod n
+
+        resultado.push_back(encrypted);
+        BN_free(m);
+    }
+
+    BN_CTX_free(ctx);
+    return resultado;
 }
