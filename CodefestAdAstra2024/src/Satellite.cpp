@@ -59,7 +59,6 @@ BIGNUM* Satellite::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
 void Satellite::receive_info(BIGNUM* response_groundstation, BIGNUM* Ps, BN_CTX* ctx){
     // Guardar la llave pública del GroundStation
     this->dh_shared_key = mod_exp(response_groundstation, this->dh_secret_key, Ps, ctx);
-    std::cout << "Satellite: Llave compartida: " << BN_bn2dec(this->dh_shared_key) << std::endl;
 }
 
 void Satellite::setGroundStation(GroundStation & groundStation){
@@ -74,7 +73,7 @@ void Satellite::encrypt(const std::string& inputPath, const std::string& outputP
     //Se extrae el nombre del archivo cifrado 
     std::string imgName = getImgName(outputPath);
     //Se comunica la llave y el nombre del archivo cifrado para que posteriormente se pueda decifrar
-    this->groundStation->storeImgKeyPair(imgName, aesKey);
+    this->groundStation->storeImgKeyPair(imgName);
 }
 
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey){
@@ -115,11 +114,11 @@ std::string Satellite::getImgName(const std::string& outputPath){
 
 std::string Satellite::generateKey()
 {
+    BN_ULONG val = BN_get_word(dh_shared_key);
     //Se define el conjunto de caracterers que pueden componer una llave 
     std::string CHARACTERS= "zABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    //Se generan 2 generadores de números aleatorios. 
-    std::random_device rd;
-    std::mt19937 generator(rd());
+    //Se generan un numero aleatorio con la llave DH
+    std::mt19937 generator(val);
     //Selecciona caracteres aleatorios del conjunto de caracteres
     std::uniform_int_distribution <> distribution(1, CHARACTERS.size() - 1);
     //Determina aleatoriamente el tamaño de la llave

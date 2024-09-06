@@ -58,7 +58,6 @@ BIGNUM* GroundStation::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
 void GroundStation::receive_info(BIGNUM* response_satellite, BIGNUM* Ps, BN_CTX* ctx){
     // Guardar la llave pública del Satellite
     this->dh_shared_key = mod_exp(response_satellite, this->dh_secret_key, Ps, ctx);
-    std::cout << "GroundStation: Llave compartida: " << BN_bn2dec(this->dh_shared_key) << std::endl;
 }
 
 void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
@@ -100,10 +99,10 @@ std::string GroundStation::getImgName(const std::string& outputPath){
     return splitString.back();
 }
 
-void GroundStation::storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey){
+void GroundStation::storeImgKeyPair(const std::string& imgName){
     //Guarda la pareja de Nombre de imagen cifrada y llave, dentro de un mapa
-    this->imgKeys.insert({imgName, encryptedKey});
-
+    std::string aesKey = generateKey();
+    this->imgKeys.insert({imgName, aesKey});
     //En caso de ser necesario crea una carpeta para persistir el mapa de imagenes y llaves 
     std::string directoryPath = "groundStationSecrets";
     if (!std::filesystem::exists(directoryPath)){
@@ -113,7 +112,7 @@ void GroundStation::storeImgKeyPair(const std::string& imgName, const std::strin
     //Guarda en el archvio imgKeys.txt las parejas Nombre imagen y llave 
     char path[] = "groundStationSecrets imgKeys.txt";
     path[20] = std::filesystem::path::preferred_separator;
-    insertLine(path, imgName +","+ encryptedKey);
+    insertLine(path, imgName +","+ aesKey);
 }
 
 void GroundStation::loadImgKeys()
@@ -135,6 +134,29 @@ void GroundStation::loadImgKeys()
         }
         this->imgKeys.insert({splitString.front(), splitString.back()});
     }   
+}
+
+std::string GroundStation::generateKey()
+{
+    BN_ULONG val = BN_get_word(dh_shared_key);
+    //Se define el conjunto de caracterers que pueden componer una llave 
+    std::string CHARACTERS= "zABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //Se generan
+    std::mt19937 generator(val);
+    //Selecciona caracteres aleatorios del conjunto de caracteres
+    std::uniform_int_distribution <> distribution(1, CHARACTERS.size() - 1);
+    //Determina aleatoriamente el tamaño de la llave
+    std::uniform_int_distribution <> keyLengthGenerator(1, CHARACTERS.size()*4 - 1);
+    
+    std::string random_string;
+    int length = keyLengthGenerator(generator);
+    //Construye la clave
+    for (int i = 0; i < length; ++i) {
+        random_string
+            += CHARACTERS[distribution(generator)];
+    }
+
+    return random_string;
 }
 
 

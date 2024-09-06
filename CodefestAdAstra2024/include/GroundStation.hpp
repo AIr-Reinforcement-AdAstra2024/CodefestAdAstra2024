@@ -13,7 +13,7 @@ class GroundStation {
 
         void decrypt(const std::string& inputPath, const std::string& outputPath);
 
-        void storeImgKeyPair(const std::string& imgName, const std::string& encryptedKey);
+        void storeImgKeyPair(const std::string& imgName);
 
         std::string getPublicKey();
 
@@ -39,6 +39,8 @@ class GroundStation {
         void insertLine(const std::string& filename, const std::string& lineToInsert);
 
         void loadImgKeys();
+
+        std::string generateKey();
 
         std::string desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n);
         
