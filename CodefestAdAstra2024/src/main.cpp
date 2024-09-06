@@ -28,7 +28,7 @@ BIGNUM* public_satellite_modulus = BN_new();
 BIGNUM* public_base_modulus = BN_new();
 
 // Declaraciones de funciones
-void loadKeysFromFile(const std::string& fileName, BIGNUM* &n, BIGNUM* &n2, BIGNUM* &e, BIGNUM* &Ps);
+void loadKeysFromFile(const std::string& fileName, BIGNUM* &public_satellite_modulus, BIGNUM* &public_base_modulus, BIGNUM* &public_satellite_exponent, BIGNUM* &Ps);
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite);
 void decrypt(const std::string& input_path, const std::string& output_path, GroundStation& groundStation);
 
