@@ -17,8 +17,16 @@ class GroundStation {
         std::string getPublicKey();
 
         std::vector<BIGNUM*> encriptarRSA(std::string msg, BIGNUM* e, BIGNUM* n);
+
+        BIGNUM* give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
+
+        void receive_info(BIGNUM* response_satellite);
         
     private:
+
+        BIGNUM* dh_secret_key;
+        BIGNUM* dh_shared_key;
+
         std::string privateKey;
         std::string publicKey;
         std::map<std::string, std::string> imgKeys;
@@ -34,6 +42,8 @@ class GroundStation {
         std::string desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n);
         
         void generateDHKey();
+
+        BIGNUM* mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx); 
 };
 
 #endif 

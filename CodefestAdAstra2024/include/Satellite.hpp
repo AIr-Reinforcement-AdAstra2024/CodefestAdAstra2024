@@ -12,10 +12,15 @@ class Satellite {
 
         void setGroundStation(GroundStation & groundStation);
 
+        BIGNUM* give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
+
+        void receive_info(BIGNUM* response_groundstation);
+
     private:
         GroundStation groundStation;
 
         BIGNUM* dh_secret_key;
+        BIGNUM* dh_shared_key;
 
         std::string generateKey();
 
@@ -26,8 +31,6 @@ class Satellite {
         void generateDHKey();
 
         BIGNUM* mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx); 
-
-        BIGNUM* DH_public_key(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
 };
 
 #endif // SATELLITE_HPP

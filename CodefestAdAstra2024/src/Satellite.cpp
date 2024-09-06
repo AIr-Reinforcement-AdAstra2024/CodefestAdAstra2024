@@ -35,10 +35,13 @@ BIGNUM* Satellite::mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx) {
     return result;
 }
 
-BIGNUM* Satellite::DH_public_key(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
-    BIGNUM* satellite_public_key = BN_new();
-    satellite_public_key = mod_exp(Gs, this->dh_secret_key, Ps, ctx);
-    return satellite_public_key;
+BIGNUM* Satellite::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
+    return mod_exp(Gs, this->dh_secret_key, Ps, ctx);
+}
+
+void Satellite::receive_info(BIGNUM* response_groundstation){
+    // Guardar la llave pública del GroundStation
+    this->publicKey = mod_exp(response_groundstation, this->dh_secret_key, Ps, ctx);
 }
 
 void print_openssl_error() {
