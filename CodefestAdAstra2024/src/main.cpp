@@ -1,10 +1,26 @@
 #include <iostream>
 #include <string>
+#include <openssl/bn.h> 
 #include <cstdlib>
 // Declaraciones de librerías usadas
 
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
+
+
+// llaves publicas Diffie Helmman 
+
+BIGNUM *Ps = BN_new();
+BIGNUM *Gs = BN_new();
+
+// llaves publicas RSA Satellite 
+
+BIGNUM* e = BN_new();
+BIGNUM* n = BN_new();
+
+// llaves publicas RSA Base (e)
+
+
 
 // Declaraciones de funciones
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite);
