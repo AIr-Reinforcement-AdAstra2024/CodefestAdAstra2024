@@ -33,6 +33,9 @@ void GroundStation::decrypt(const std::string& inputPath, const std::string& out
 
     if (iterator != this->imgKeys.end()) {
         std::string aesKey = this->imgKeys[fileName];
+        if (aesKey.empty()){
+            throw std::runtime_error("Key for file \""+ fileName + "\" not found !!!");
+        }
         //En caso de tener la llave de la imagen, se descifra la imagen
         decryptImg(inputPath, outputPath,aesKey);
     }
@@ -45,11 +48,13 @@ void GroundStation::decrypt(const std::string& inputPath, const std::string& out
 
 
 std::string GroundStation::getPublicKey(){
+    //Se obtiene la llave pública del GroundStation
     return this->publicKey ;
 }
 
 std::string GroundStation::getImgName(const std::string& outputPath){
     //Dado un path se otbiene el nombre del archivo
+    // Ejemplo: "C:/Users/Usuario/Documents/imagen.jpg" -> "imagen.jpg"
     std::stringstream ss(outputPath);
     std::string item;
     std::vector<std::string> splitString;

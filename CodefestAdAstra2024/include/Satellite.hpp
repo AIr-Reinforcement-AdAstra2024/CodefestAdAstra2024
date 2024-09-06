@@ -15,6 +15,8 @@ class Satellite {
     private:
         GroundStation groundStation;
 
+        BIGNUM* dh_secret_key;
+
         std::string generateKey();
 
         void encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey);
@@ -24,6 +26,8 @@ class Satellite {
         void generateDHKey();
 
         BIGNUM* mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx); 
+
+        BIGNUM* DH_public_key(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
 };
 
 #endif // SATELLITE_HPP

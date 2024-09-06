@@ -13,10 +13,6 @@ make
 if exist CodefestAdAstra2024.exe (
     :: Mover el ejecutable al directorio superior
     move CodefestAdAstra2024.exe ..\..\CodefestAdAstra2024.exe
-    cd ..\..
-
-    :: Ejecutar el programa con los argumentos pasados al script
-    CodefestAdAstra2024.exe %*
 ) else (
     echo Error: El ejecutable no fue generado. Revisa los errores de compilación.
 )

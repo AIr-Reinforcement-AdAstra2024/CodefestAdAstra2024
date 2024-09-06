@@ -23,12 +23,22 @@ std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUM
 void Satellite::generateDHKey()
 {
     int satellite_personalkey = distribution(generator);
+    this->dh_secret_key = BN_new();
+    BN_set_word(this->dh_secret_key, satellite_personalkey);
 }
 
 BIGNUM* Satellite::mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx) {
+    // return g^h mod Ps
+    // mi llave privada es h
     BIGNUM* result = BN_new();
     BN_mod_exp(result, g, h, Ps, ctx); // Realiza la exponenciación modular
     return result;
+}
+
+BIGNUM* Satellite::DH_public_key(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
+    BIGNUM* satellite_public_key = BN_new();
+    satellite_public_key = mod_exp(Gs, this->dh_secret_key, Ps, ctx);
+    return satellite_public_key;
 }
 
 void print_openssl_error() {

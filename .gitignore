@@ -158,3 +158,10 @@ CodefestAdAstra2024/build/CPackConfig.cmake
 CodefestAdAstra2024/build/CodefestAdAstra2024
 CodefestAdAstra2024/build/CodefestAdAstra2024
 CodefestAdAstra2024/encryp.data
+
+CodefestAdAstra2024.exe
+CodefestAdAstra2024.sh
+
+.vscode/*
+build/*
+CodefestAdAstra2024/build/*
