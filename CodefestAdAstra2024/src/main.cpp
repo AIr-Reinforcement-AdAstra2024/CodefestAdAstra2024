@@ -96,6 +96,10 @@ void loadKeysFromFile(const std::string& fileName, BIGNUM* &n, BIGNUM* &n2, BIGN
     file.close();  // Cerrar el archivo después de leerlo
 }
 
+void print_openssl_error() {
+    ERR_print_errors_fp(stderr);
+}
+
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite) {
     satellite.encrypt(input_path, output_path);
     std::cout << "input_path=" << input_path << std::endl;
