@@ -10,21 +10,23 @@
 
 #define MAX_NUMBER 100000000
 
+// Se crea un generador de números aleatorios
+std::random_device rd2;
 static long int fixedSeed = 128127523114124;  // Definir la semilla fija
-static std::mt19937 generator(fixedSeed); 
-static std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUMBER]
+static std::mt19937 generator(rd2());  // Inicializar generador con dispositivo de aleatoriedad
+static std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // Rango [0 - MAX_NUMBER]
 
-
-GroundStation::GroundStation(){
-    //Cada vez que se crea esta clase guarda en un mapa los nombres de los archivos cifrados y las llaves para descifrar cada uno.
+// Constructor de la clase GroundStation
+GroundStation::GroundStation() {
+    // Carga en un mapa los nombres de archivos cifrados y sus respectivas llaves
     loadImgKeys();
 
     // Inicializa las variables BIGNUM para Diffie-Hellman
     dh_secret_key = BN_new();  // Asignar memoria para dh_secret_key
     dh_shared_key = BN_new();  // Asignar memoria para dh_shared_key
-
 }
 
+// Destructor de la clase GroundStation
 GroundStation::~GroundStation() {
     // Liberar la memoria asignada para dh_secret_key y dh_shared_key
     if (dh_secret_key != nullptr) {
@@ -35,154 +37,170 @@ GroundStation::~GroundStation() {
     }
 }
 
-void GroundStation::generateDHKey()
-{
-    int ground_personalkey = distribution(generator);
-    this->dh_secret_key = BN_new();
-    BN_set_word(this->dh_secret_key, ground_personalkey);
+// Generar la clave Diffie-Hellman para GroundStation
+void GroundStation::generateDHKey() {
+    int ground_personalkey = distribution(generator);  // Generar clave personal del GroundStation
+    this->dh_secret_key = BN_new();  // Crear un nuevo BIGNUM para la clave secreta
+    BN_set_word(this->dh_secret_key, ground_personalkey);  // Asignar la clave generada al BIGNUM
 }
 
+// Función de exponenciación modular: (g^h) % Ps
 BIGNUM* GroundStation::mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx) {
-    // return g^h mod Ps
-    // mi llave privada es h
-    BIGNUM* result = BN_new();
-    BN_mod_exp(result, g, h, Ps, ctx); // Realiza la exponenciación modular
+    BIGNUM* result = BN_new();  // Crear un nuevo BIGNUM para almacenar el resultado
+    BN_mod_exp(result, g, h, Ps, ctx);  // Realiza la exponenciación modular
     return result;
 }
 
+// Generar la información para Diffie-Hellman y retornar g^dh_secret_key % Ps
 BIGNUM* GroundStation::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
-    generateDHKey();
-    return mod_exp(Gs, this->dh_secret_key, Ps, ctx);
+    generateDHKey();  // Generar la clave Diffie-Hellman
+    return mod_exp(Gs, this->dh_secret_key, Ps, ctx);  // Calcular y devolver g^dh_secret_key mod Ps
 }
 
-void GroundStation::receive_info(BIGNUM* response_satellite, BIGNUM* Ps, BN_CTX* ctx){
-    // Guardar la llave pública del Satellite
+// Recibir información del Satellite y calcular la clave compartida
+void GroundStation::receive_info(BIGNUM* response_satellite, BIGNUM* Ps, BN_CTX* ctx) {
+    // Guardar la clave compartida calculada usando la respuesta del Satellite
     this->dh_shared_key = mod_exp(response_satellite, this->dh_secret_key, Ps, ctx);
 }
 
-void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath){
-    //Se obtiene el nombre del archivo cifrado
+// Función para descifrar una imagen
+void GroundStation::decrypt(const std::string& inputPath, const std::string& outputPath) {
+    // Se obtiene el nombre del archivo cifrado
     std::string fileName = getImgName(inputPath);
-    //Se obtiene la llave del archivo cifrado (Se asume que dicha llave existe)
+    // Se busca la llave asociada al archivo cifrado
     std::map<std::string, std::string>::iterator iterator = this->imgKeys.find(fileName);
 
     if (iterator != this->imgKeys.end()) {
+        // Si la llave es encontrada, se obtiene la llave AES
         std::string aesKey = this->imgKeys[fileName];
-        if (aesKey.empty()){
-            throw std::runtime_error("Key for file \""+ fileName + "\" not found !!!");
+        if (aesKey.empty()) {
+            throw std::runtime_error("Key for file \"" + fileName + "\" not found !!!");
         }
-        //En caso de tener la llave de la imagen, se descifra la imagen
-        decryptImg(inputPath, outputPath,aesKey);
+        // Descifrar la imagen usando la llave
+        decryptImg(inputPath, outputPath, aesKey);
+    } else {
+        throw std::runtime_error("File \"" + fileName + "\" not found !!!");
     }
-    else{
-        throw std::runtime_error("File \""+ fileName + "\" not found !!!");
-    }
-
-    
 }
 
-
-std::string GroundStation::getPublicKey(){
-    //Se obtiene la llave pública del GroundStation
-    return this->publicKey ;
+// Obtener la llave pública del GroundStation
+std::string GroundStation::getPublicKey() {
+    return this->publicKey;
 }
 
-std::string GroundStation::getImgName(const std::string& outputPath){
-    //Dado un path se otbiene el nombre del archivo
-    // Ejemplo: "C:/Users/Usuario/Documents/imagen.jpg" -> "imagen.jpg"
+// Obtener el nombre del archivo a partir del path
+std::string GroundStation::getImgName(const std::string& outputPath) {
     std::stringstream ss(outputPath);
     std::string item;
     std::vector<std::string> splitString;
+    // Dividir el path por el separador de directorios
     while (std::getline(ss, item, std::filesystem::path::preferred_separator)) {
         splitString.push_back(item);
     }
-    return splitString.back();
+    return splitString.back();  // Retornar el último componente del path (nombre del archivo)
 }
 
-void GroundStation::storeImgKeyPair(const std::string& imgName){
-    //Guarda la pareja de Nombre de imagen cifrada y llave, dentro de un mapa
-    std::string aesKey = generateKey();
-    this->imgKeys.insert({imgName, aesKey});
-    //En caso de ser necesario crea una carpeta para persistir el mapa de imagenes y llaves 
+// Guardar la pareja de Nombre de imagen cifrada y llave en el mapa
+void GroundStation::storeImgKeyPair(const std::string& imgName) {
+    std::string aesKey = generateKey();  // Generar una llave AES
+    this->imgKeys.insert({imgName, aesKey});  // Insertar la pareja en el mapa
+
+    // Si es necesario, crear una carpeta para almacenar las llaves
     std::string directoryPath = "groundStationSecrets";
-    if (!std::filesystem::exists(directoryPath)){
+    if (!std::filesystem::exists(directoryPath)) {
         std::filesystem::create_directory(directoryPath);
     }
 
-    //Guarda en el archvio imgKeys.txt las parejas Nombre imagen y llave 
+    // Guardar en el archivo imgKeys.txt las parejas de Nombre de imagen y llave
     char path[] = "groundStationSecrets imgKeys.txt";
     path[20] = std::filesystem::path::preferred_separator;
-    insertLine(path, imgName +","+ aesKey);
+    insertLine(path, imgName + "," + aesKey);  // Insertar línea en el archivo
 }
 
-void GroundStation::loadImgKeys()
-{   
-    //Abre el archivo de mapas
+// Cargar las llaves desde el archivo imgKeys.txt
+void GroundStation::loadImgKeys() {   
     char path[] = "groundStationSecrets imgKeys.txt";
     path[20] = std::filesystem::path::preferred_separator;
 
-    //Lee las líneas del archivo y las almacena dentro del mapa de nombres de imagenes y llaves
+    // Leer las líneas del archivo y almacenarlas en el mapa
     std::ifstream inputFile(path);
-    std::string linea; 
+    std::string linea;
     while (std::getline(inputFile, linea)) {
         std::string item;
         std::vector<std::string> splitString;
         std::stringstream ss2(linea); 
-        while (std::getline(ss2, item, ',')) 
-        {
-            splitString.push_back(item);    
+        while (std::getline(ss2, item, ',')) {
+            splitString.push_back(item);
         }
         this->imgKeys.insert({splitString.front(), splitString.back()});
-    }   
+    }
 }
 
-std::string GroundStation::generateKey()
-{
-    BN_ULONG val = BN_get_word(dh_shared_key);
-    //Se define el conjunto de caracterers que pueden componer una llave 
-    std::string CHARACTERS= "zABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    //Se generan
+// Generar una clave aleatoria usando la clave Diffie-Hellman compartida
+std::string GroundStation::generateKey() {
+    char* dh_shared_key_str = BN_bn2dec(dh_shared_key);  // Convertir dh_shared_key a cadena decimal
+    std::string dh_shared_key_string(dh_shared_key_str);
+
+    // Tomar los primeros 19 dígitos de la clave compartida
+    std::string f_19_digits = dh_shared_key_string.substr(0, 19);
+
+    // Convertir los primeros 19 dígitos a un entero de tipo unsigned long long
+    unsigned long long val = std::stoull(f_19_digits);
+    std::cout << val << std::endl;
+
+    // Definir el conjunto de caracteres que pueden componer una llave 
+    std::string CHARACTERS = "zABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    // Generar un número aleatorio con la clave Diffie-Hellman
     std::mt19937 generator(val);
-    //Selecciona caracteres aleatorios del conjunto de caracteres
-    std::uniform_int_distribution <> distribution(1, CHARACTERS.size() - 1);
-    //Determina aleatoriamente el tamaño de la llave
-    std::uniform_int_distribution <> keyLengthGenerator(1, CHARACTERS.size()*4 - 1);
-    
+
+    // Seleccionar caracteres aleatorios del conjunto de caracteres
+    std::uniform_int_distribution<> distribution(1, CHARACTERS.size() - 1);
+
+    // Determinar aleatoriamente el tamaño de la llave
+    std::uniform_int_distribution<> keyLengthGenerator(1, CHARACTERS.size() * 4 - 1);
+
     std::string random_string;
     int length = keyLengthGenerator(generator);
-    //Construye la clave
+
+    // Construir la clave aleatoria
     for (int i = 0; i < length; ++i) {
-        random_string
-            += CHARACTERS[distribution(generator)];
+        random_string += CHARACTERS[distribution(generator)];
     }
 
-    return random_string;
+    return random_string;  // Devolver la clave generada
 }
 
-
+// Insertar una línea en un archivo de texto
 void GroundStation::insertLine(const std::string& filename, const std::string& lineToInsert) {
-    //abre un archivo y añande una string específico al final
-    std::ofstream outputFile(filename, std::ios::app);
-    outputFile << lineToInsert << std::endl;
+    std::ofstream outputFile(filename, std::ios::app);  // Abrir archivo en modo append
+    outputFile << lineToInsert << std::endl;  // Escribir la línea en el archivo
 }
 
-
-void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey){
-    //Crea una clase para poder descifrar la imagen 
+// Función para descifrar una imagen
+void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey) {
+    // Crear un objeto Cipher para descifrar la imagen
     Cipher cipher("aes-256-ctr", "sha256");
-    //Lee la imagen cifrada y la almacena en un string
+
+    // Leer la imagen cifrada del archivo y almacenarla en un string
     std::string text = cipher.file_read(inputPath);
-    //Decifra la imagen
+
+    // Decifrar la imagen usando la llave AES
     std::string decryptedImg = cipher.decrypt(text, aesKey);
-    //Se convierte la imagen a bytes
+
+    // Convertir la imagen decifrada a bytes
     Cipher::kv1_t dataNew = cipher.decode_base64(decryptedImg);
-    //Se extraen los bytes y el tamaño de ellos
+
+    // Extraer los bytes y su tamaño
     unsigned char* dataNewPointer = dataNew.first;
     unsigned int dataNewLength = dataNew.second; 
-    //Se guardan los bytes en el directorio especificado
+
+    // Guardar los bytes en el archivo de salida
     std::ofstream outputFile(outputPath, std::ios::binary);
     outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
 }
+
+// Código comentado para desencriptar con RSA (no utilizado actualmente)
 
 // std::string GroundStation::desencriptarRSA(std::vector<BIGNUM*> encrypted_msg, BIGNUM* d, BIGNUM* n) {
 //     BN_CTX* ctx = BN_CTX_new();
@@ -198,6 +216,8 @@ void GroundStation::decryptImg(std::string inputPath, std::string outputPath, st
 //     BN_CTX_free(ctx);
 //     return resultado;
 // }
+
+// Código comentado para encriptar con RSA (no utilizado actualmente)
 
 // std::vector<BIGNUM*> GroundStation::encriptarRSA(std::string msg, BIGNUM* e, BIGNUM* n){
 //     BN_CTX* ctx = BN_CTX_new();
