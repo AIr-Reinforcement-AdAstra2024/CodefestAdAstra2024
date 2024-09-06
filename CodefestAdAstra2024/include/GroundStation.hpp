@@ -20,7 +20,7 @@ class GroundStation {
 
         BIGNUM* give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
 
-        void receive_info(BIGNUM* response_satellite);
+        void receive_info(BIGNUM* response_satellite, BIGNUM* Ps, BN_CTX* ctx);
         
     private:
 

@@ -14,7 +14,7 @@ class Satellite {
 
         BIGNUM* give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx);
 
-        void receive_info(BIGNUM* response_groundstation);
+        void receive_info(BIGNUM* response_groundstation, BIGNUM* Ps, BN_CTX* ctx);
 
     private:
         GroundStation groundStation;

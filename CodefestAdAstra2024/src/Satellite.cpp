@@ -39,9 +39,9 @@ BIGNUM* Satellite::give_me_info(BIGNUM* Ps, BIGNUM* Gs, BN_CTX* ctx) {
     return mod_exp(Gs, this->dh_secret_key, Ps, ctx);
 }
 
-void Satellite::receive_info(BIGNUM* response_groundstation){
+void Satellite::receive_info(BIGNUM* response_groundstation, BIGNUM* Ps, BN_CTX* ctx){
     // Guardar la llave pública del GroundStation
-    this->publicKey = mod_exp(response_groundstation, this->dh_secret_key, Ps, ctx);
+    this->dh_shared_key = mod_exp(response_groundstation, this->dh_secret_key, Ps, ctx);
 }
 
 void print_openssl_error() {

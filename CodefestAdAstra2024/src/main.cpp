@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {
     
     // receive
 
-    satellite.receive_info(response_groundstation);
-    groundStation.receive_info(response_satellite);
+    satellite.receive_info(response_groundstation, Ps, ctx);
+    groundStation.receive_info(response_satellite, Ps, ctx);
 
     // image encryption
 
