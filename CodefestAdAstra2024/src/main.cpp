@@ -25,6 +25,10 @@ int main(int argc, char* argv[]) {
     GroundStation groundStation;
 
 
+    //definir aquí cosas copartidas
+
+    satellite.setGroundStation(groundStation);
+
 
     if (operation == "encrypt") {
         encrypt(input_path, output_path, satellite);

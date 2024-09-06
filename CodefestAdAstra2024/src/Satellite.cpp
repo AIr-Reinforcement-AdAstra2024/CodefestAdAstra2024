@@ -11,6 +11,10 @@
 #include "cipher.h"
 
 
+void Satellite::setGroundStation(GroundStation & groundStation){
+    this->groundStation = groundStation;
+}
+
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath){
     //Genera una llave aleatoria como un string
     std::string aesKey = generateKey();

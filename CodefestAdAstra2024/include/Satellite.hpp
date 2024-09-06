@@ -4,11 +4,13 @@
 #include <string>
 #include "GroundStation.hpp"
 
-class GroudStation;
+class GroundStation;
 
 class Satellite {
     public:
         void encrypt(const std::string& inputPath, const std::string& outputPath);
+
+        void setGroundStation(GroundStation & groundStation);
 
     private:
         GroundStation groundStation;
