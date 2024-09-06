@@ -20,7 +20,10 @@ class Satellite {
         void encryptImg(const std::string& inputPath, const std::string& outputPath,const std::string& aesKey);
 
         std::string getImgName(const std::string& outputPath);
+        
+        void generateDHKey();
 
+        BIGNUM* mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx); 
 };
 
 #endif // SATELLITE_HPP

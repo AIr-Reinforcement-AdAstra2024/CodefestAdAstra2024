@@ -5,11 +5,35 @@
 #include <filesystem>
 #include <fstream>
 #include <random>
+#include <openssl/bn.h>  // Para BIGNUM
+#include <openssl/evp.h> // Para funciones criptográficas
+#include <openssl/bio.h> // Para el manejo de BIOs
+#include <openssl/buffer.h>
+#include <openssl/err.h>
 
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
 #include "cipher.h"
+#define MAX_NUMBER 100000000
 
+long int fixedSeed = 128123123114124;  // Definir la semilla fija
+std::mt19937 generator(fixedSeed); 
+std::uniform_int_distribution<int> distribution(0, MAX_NUMBER);  // [0 - MAX_NUMBER]
+
+void Satellite::generateDHKey()
+{
+    int satellite_personalkey = distribution(generator);
+}
+
+BIGNUM* Satellite::mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx) {
+    BIGNUM* result = BN_new();
+    BN_mod_exp(result, g, h, Ps, ctx); // Realiza la exponenciación modular
+    return result;
+}
+
+void print_openssl_error() {
+    ERR_print_errors_fp(stderr);
+}
 
 void Satellite::setGroundStation(GroundStation & groundStation){
     this->groundStation = groundStation;
