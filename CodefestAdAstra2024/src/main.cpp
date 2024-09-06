@@ -14,26 +14,21 @@
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
 
-// llaves publicas Diffie Helmman 
-
+// Llaves públicas Diffie-Hellman
 BIGNUM *Ps = BN_new();
 BIGNUM *Gs = BN_new();
 
-// Generador comun (Gs) para valores Ps de 2048
-
+// Generador común (Gs) para valores Ps de 2048
 BN_set_word(Gs, 2);
 
-// llaves publicas RSA Satellite  (e) y (n)
-
+// Llaves públicas RSA Satellite (e) y (n)
 BIGNUM* public_satellite_exponent = BN_new();
 BIGNUM* public_satellite_modulus = BN_new();
 
-// llaves publicas RSA Base (n)
-
+// Llaves públicas RSA Base (n)
 BIGNUM* public_base_modulus = BN_new();
 
 // Declaraciones de funciones
-
 void loadKeysFromFile(const std::string& fileName, BIGNUM* &n, BIGNUM* &n2, BIGNUM* &e, BIGNUM* &d, BIGNUM* &d2, BIGNUM* &Ps);
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite);
 void decrypt(const std::string& input_path, const std::string& output_path, GroundStation& groundStation);
@@ -48,15 +43,12 @@ int main(int argc, char* argv[]) {
     std::string input_path = argv[2];
     std::string output_path = argv[3];
 
-    // Se crean las clases a utilizar para cifrar o descifrar
+    // Crear las clases a utilizar para cifrar o descifrar
     Satellite satellite;
     GroundStation groundStation;
 
-
-    //definir aquí cosas copartidas
-
+    // Definir aquí cosas compartidas
     satellite.setGroundStation(groundStation);
-
 
     if (operation == "encrypt") {
         encrypt(input_path, output_path, satellite);
@@ -105,18 +97,14 @@ void loadKeysFromFile(const std::string& fileName, BIGNUM* &n, BIGNUM* &n2, BIGN
 }
 
 void encrypt(const std::string& input_path, const std::string& output_path, Satellite& satellite) {
-    
     satellite.encrypt(input_path, output_path);
-
     std::cout << "input_path=" << input_path << std::endl;
     std::cout << "output_path=" << output_path << std::endl;
     std::cout << "Encrypted image" << std::endl;
 }
 
 void decrypt(const std::string& input_path, const std::string& output_path, GroundStation& groundStation) {
-    
     groundStation.decrypt(input_path, output_path);
-    
     std::cout << "input_path=" << input_path << std::endl;
     std::cout << "output_path=" << output_path << std::endl;
     std::cout << "Decrypted image" << std::endl;
