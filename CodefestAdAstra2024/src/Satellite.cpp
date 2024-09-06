@@ -127,7 +127,6 @@ std::string Satellite::generateKey() {
 
     // Convertir los primeros 19 dígitos a un entero de tipo unsigned long long
     unsigned long long val = std::stoull(f_19_digits);
-    std::cout << val << std::endl;
 
     // Liberar la memoria del string creado por OpenSSL
     OPENSSL_free(dh_shared_key_str);
