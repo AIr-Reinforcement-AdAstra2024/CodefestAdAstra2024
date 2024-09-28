@@ -104,11 +104,11 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
         inputFile.read((char*) buffer, bytesToRead);
 
         // Convertir la imagen a base64
-        std::string imgInBase64 = cipher.encode_base64(buffer, fileSize); 
+        std::string imgInBase64 = cipher.encode_base64(buffer, bytesToRead); 
 
         // Cifrar la imagen usando la clave AES
         std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
-
+        encryptedImg = encryptedImg.substr(0, encryptedImg.length() - 2);
         // Guardar la imagen cifrada en el archivo de salida
         insertLine(outputPath, encryptedImg);
     }
@@ -171,7 +171,7 @@ std::string Satellite::generateKey() {
 
 void Satellite::insertLine(const std::string& filename, const std::string& lineToInsert) {
     std::ofstream outputFile(filename, std::ios::app);  // Abrir archivo en modo append
-    outputFile << lineToInsert << std::endl;  // Escribir la línea en el archivo
+    outputFile << lineToInsert;  // Escribir la línea en el archivo
 }
 
 // Código comentado para desencriptar con RSA (no utilizado actualmente)
