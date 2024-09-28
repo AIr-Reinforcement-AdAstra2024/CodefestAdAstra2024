@@ -88,7 +88,7 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
     inputFile.seekg(0, std::ios::beg);  // Devolver el puntero al inicio
 
     // Crear un arreglo de bytes para almacenar la imagen
-    Cipher::uint bufferSize = 64*2;
+    Cipher::uint bufferSize = 16;
     Cipher::uchar* buffer = new unsigned char[bufferSize];
     
     // Crear un cifrador AES con CTR y SHA-256
@@ -108,23 +108,22 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
 
         // Cifrar la imagen usando la clave AES
         std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
-        encryptedImg = encryptedImg.substr(0, encryptedImg.length());
+        //encryptedImg = encryptedImg.substr(0, encryptedImg.length());
 
-        // Find the position of the last newline character '\n'
-        size_t lastNewline = encryptedImg.rfind('\n');
-        
-        std::string lastLine;
-        // If no newline is found, the entire string is the last segment
-        if (lastNewline == std::string::npos) {
-            lastLine = encryptedImg;
+
+        std::vector<std::string> tokens;
+        std::stringstream ss(encryptedImg);
+        std::string token;
+
+        while (std::getline(ss, token, '\n')) {
+            tokens.push_back(token);
         }
-        
-        // Return the substring starting after the last newline character
-        lastLine = encryptedImg.substr(lastNewline + 1);
+        std::string result;
+        for (const auto& s : tokens) {
+            result += s;
+        }
 
-        std::cerr << lastLine.length() << std::endl;
-
-        insertLine(outputPath, encryptedImg);
+        insertLine(outputPath, result);
     }
     
     // Leer el archivo de imagen en el arreglo
