@@ -165,3 +165,4 @@ CodefestAdAstra2024.sh
 .vscode/*
 build/*
 CodefestAdAstra2024/build/*
+out.enc/
