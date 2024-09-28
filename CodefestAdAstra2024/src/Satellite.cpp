@@ -84,26 +84,40 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
     // Leer la imagen en binario
     std::ifstream inputFile(inputPath, std::ios::binary);
     inputFile.seekg(0, std::ios::end);  // Mover el puntero del archivo al final para obtener el tamaño
-    Cipher::uint fileSize = inputFile.tellg();  // Obtener el tamaño del archivo
+    Cipher::uint fileSize = inputFile.tellg(); // Obtener el tamaño del archivo
     inputFile.seekg(0, std::ios::beg);  // Devolver el puntero al inicio
 
     // Crear un arreglo de bytes para almacenar la imagen
-    Cipher::uchar* data = new unsigned char[fileSize];
-    inputFile.read((char*) data, fileSize);  // Leer el archivo de imagen en el arreglo
-    inputFile.close();  // Cerrar el archivo
-
+    Cipher::uint bufferSize = 1024;
+    Cipher::uchar* buffer = new unsigned char[bufferSize];
+    
     // Crear un cifrador AES con CTR y SHA-256
     Cipher cipher("aes-256-ctr", "sha256");
 
-    // Convertir la imagen a base64
-    std::string imgInBase64 = cipher.encode_base64(data, fileSize); 
+    for (unsigned int i = 0; i < fileSize; i+= bufferSize){
+        size_t bytesToRead = bufferSize;
+        if (i + bufferSize > fileSize) {
+            bytesToRead = fileSize - i;
+        }
 
-    // Cifrar la imagen usando la clave AES
-    std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
+        inputFile.seekg(i, std::ios::beg);
+        inputFile.read((char*) buffer, bytesToRead);
 
-    // Guardar la imagen cifrada en el archivo de salida
-    cipher.file_write(outputPath, encryptedImg, true);
+        // Convertir la imagen a base64
+        std::string imgInBase64 = cipher.encode_base64(buffer, fileSize); 
+
+        // Cifrar la imagen usando la clave AES
+        std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
+
+        // Guardar la imagen cifrada en el archivo de salida
+        insertLine(outputPath, encryptedImg);
+    }
+    
+    // Leer el archivo de imagen en el arreglo
+    inputFile.close();  // Cerrar el archivo
 }
+
+    
 
 // Obtener el nombre del archivo a partir del path
 std::string Satellite::getImgName(const std::string& outputPath) {
@@ -152,6 +166,12 @@ std::string Satellite::generateKey() {
     }
 
     return random_string;  // Devolver la clave generada
+}
+
+
+void Satellite::insertLine(const std::string& filename, const std::string& lineToInsert) {
+    std::ofstream outputFile(filename, std::ios::app);  // Abrir archivo en modo append
+    outputFile << lineToInsert << std::endl;  // Escribir la línea en el archivo
 }
 
 // Código comentado para desencriptar con RSA (no utilizado actualmente)

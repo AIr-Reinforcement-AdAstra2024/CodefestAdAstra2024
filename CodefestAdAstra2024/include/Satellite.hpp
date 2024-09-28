@@ -45,6 +45,8 @@ class Satellite {
 
         // Realizar la operación modular g^h mod Ps
         BIGNUM* mod_exp(BIGNUM* g, BIGNUM* h, BIGNUM* Ps, BN_CTX* ctx); 
+
+        void insertLine(const std::string& filename, const std::string& lineToInsert);
 };
 
 #endif // SATELLITE_HPP
