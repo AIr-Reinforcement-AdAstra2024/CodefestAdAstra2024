@@ -1,21 +1,28 @@
-# Codefest Ad Astra 2024 - Cifrado y Descifrado Satelital
+# **Codefest Ad Astra 2024 - Cifrado y Descifrado Satelital**
 
 Este proyecto implementa una solución criptográfica para el cifrado y descifrado de imágenes satelitales, cumpliendo con los requisitos del **Codefest Ad Astra 2024**. La solución está diseñada para sistemas embebidos y utiliza llaves dinámicas para garantizar la seguridad de las comunicaciones entre satélites y estaciones terrenas.
 
 ## **Contenido**
 
-- [Descripción del Proyecto](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Requisitos](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Instalación](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Compilación](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Ejecución](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Estructura del Proyecto](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Detalles Técnicos](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-    - [Cifrado](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-    - [Descifrado](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-    - [Llaves Dinámicas](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Verificación y Validación](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
-- [Autores](https://www.notion.so/Codefest-Ad-Astra-2024-Cifrado-y-Descifrado-Satelital-10fbb7d45b8f80959d85db995b6706b9?pvs=21)
+- [**Codefest Ad Astra 2024 - Cifrado y Descifrado Satelital**](#codefest-ad-astra-2024---cifrado-y-descifrado-satelital)
+  - [**Contenido**](#contenido)
+  - [**Descripción del Proyecto**](#descripción-del-proyecto)
+  - [**Requisitos**](#requisitos)
+  - [**Instalación**](#instalación)
+  - [**Compilación**](#compilación)
+    - [**En Linux/Unix**](#en-linuxunix)
+    - [**En Windows**](#en-windows)
+  - [**Ejecución**](#ejecución)
+  - [**Estructura del Proyecto**](#estructura-del-proyecto)
+  - [**Detalles Técnicos**](#detalles-técnicos)
+    - [**Cifrado**](#cifrado)
+    - [**Descifrado**](#descifrado)
+    - [**Llaves Dinámicas**](#llaves-dinámicas)
+  - [**Verificación y Validación**](#verificación-y-validación)
+  - [**Ejemplo de imagen cifrada**](#ejemplo-de-imagen-cifrada)
+  - [**Capturas de salida del cifrado y descifrado**](#capturas-de-salida-del-cifrado-y-descifrado)
+  - [**Autores**](#autores)
+
 
 ## **Descripción del Proyecto**
 
@@ -27,30 +34,24 @@ La solución está diseñada para ejecutarse en un **Jetson Nano** y hace uso de
 
 - **Sistemas embebidos**: El código está optimizado para ejecutarse en una Jetson Nano con un límite de **4 GB de RAM**.
 - **Librerías**:
-    - `libcrypto` para el cifrado/descifrado.
-    - `OpenCV` para el manejo de imágenes.
+  - `libcrypto` para el cifrado/descifrado usando **OpenSSL**.
 - **Lenguaje**: C/C++
-- **Herramientas**:
-    - CMake para la compilación.
-    - Jetson Nano con Ubuntu (ya configurado en la competencia).
+- **Herramientas**: 
+  - CMake para la compilación.
+  - Jetson Nano con Ubuntu (ya configurado en la competencia).
 
 ## **Instalación**
 
 1. Clonar este repositorio:
-    
-    ```bash
-    git clone <https://github.com/tuusuario/CodefestAdAstra2024.git>
-    cd CodefestAdAstra2024
-    
-    ```
-    
+   ```bash
+   git clone https://github.com/tuusuario/CodefestAdAstra2024.git
+   cd CodefestAdAstra2024
+   ```
+
 2. Instalar las dependencias necesarias (en caso de que no estén instaladas en el entorno de la Jetson Nano):
-    
-    ```bash
-    sudo apt-get install libcrypto++-dev libopencv-dev
-    
-    ```
-    
+   ```bash
+   sudo apt-get install libcrypto++-dev
+   ```
 
 ## **Compilación**
 
@@ -60,14 +61,12 @@ Para compilar el código, ejecutar el siguiente comando:
 
 ```bash
 ./build.sh
-
 ```
 
 Este comando generará el ejecutable `CodefestAdAstra2024.sh` dentro del directorio. Para ejecutar el programa:
 
 ```bash
 ./CodefestAdAstra2024.sh
-
 ```
 
 ### **En Windows**
@@ -75,26 +74,22 @@ Este comando generará el ejecutable `CodefestAdAstra2024.sh` dentro del directo
 Existen varias opciones para compilar el código en Windows. A continuación, se detallan algunos métodos:
 
 - **MinGW**:
-    1. Instalar `mingw32-make`.
-    2. Navegar a la carpeta del proyecto: `CodefestAdAstra2024/build`.
-    3. Ejecutar:
-        
-        ```bash
-        mingw32-make
-        
-        ```
-        
+  1. Instalar `mingw32-make`.
+  2. Navegar a la carpeta del proyecto: `CodefestAdAstra2024/build`.
+  3. Ejecutar:
+     ```bash
+     mingw32-make
+     ```
+
 - **Visual Studio**:
-    1. Abrir la carpeta del proyecto en Visual Studio.
-    2. Ejecutar `nmake` desde la terminal.
+  1. Abrir la carpeta del proyecto en Visual Studio.
+  2. Ejecutar `nmake` desde la terminal.
+
 - **CMake** (experimental):
-Ejecutar:
-    
-    ```bash
-    ./build.bat
-    
-    ```
-    
+  Ejecutar:
+  ```bash
+  ./build.bat
+  ```
 
 ## **Ejecución**
 
@@ -102,12 +97,11 @@ Para ejecutar el programa, después de la compilación, usar el siguiente comand
 
 ```bash
 ./CodefestAdAstra2024.sh <ruta_imagen_entrada> <ruta_imagen_salida>
-
 ```
 
 ## **Estructura del Proyecto**
 
-```
+```plaintext
 ├── include/                 # Archivos de cabecera
 │   ├── cipher.h             # Definiciones para cifrado y descifrado
 │   ├── GroundStation.hpp    # Lógica de la estación terrena
@@ -121,27 +115,24 @@ Para ejecutar el programa, después de la compilación, usar el siguiente comand
 ├── Diagramas/               # Diagramas UML del proyecto
 ├── README.md                # Archivo README
 └── Documento_de_diseño___CodefestAdAstra2024.pdf  # Documento detallado del diseño del proyecto
-
 ```
 
 ## **Detalles Técnicos**
 
 ### **Cifrado**
 
-El algoritmo de cifrado se encuentra en `cipher.cc` y utiliza un esquema de cifrado simétrico basado en **AES-256** para garantizar la integridad y seguridad de las imágenes satelitales. El algoritmo toma como entrada la imagen en formato binario y la cifra para que no sea legible ni manipulable.
+El algoritmo de cifrado se encuentra en `cipher.cc` y utiliza la librería **OpenSSL** para implementar el cifrado simétrico basado en **AES-256**. Este esquema garantiza la integridad y seguridad de los datos en la comunicación satelital. El algoritmo toma como entrada los datos de la imagen y los cifra usando la llave dinámica generada.
 
 ```cpp
 void encryptImage(const std::string &inputPath, const std::string &outputPath);
-
 ```
 
 ### **Descifrado**
 
-El descifrado sigue un esquema simétrico, utilizando la misma llave que el cifrado para restaurar la imagen original.
+El descifrado sigue un esquema simétrico, utilizando **OpenSSL** y la misma llave que el cifrado para restaurar la imagen original. El descifrado asegura que no haya pérdida de calidad en los datos de la imagen después de la operación.
 
 ```cpp
 void decryptImage(const std::string &inputPath, const std::string &outputPath);
-
 ```
 
 ### **Llaves Dinámicas**
@@ -153,14 +144,49 @@ El manejo de llaves dinámicas es crucial en este proyecto. Las llaves no se alm
 Para garantizar la calidad del código, se recomienda el uso de las herramientas de análisis estático **Facebook Infer** y **SonarQube**. Estas herramientas permiten identificar posibles errores o vulnerabilidades en el código.
 
 1. **Facebook Infer**:
-    
-    ```bash
-    infer run -- make
-    
-    ```
-    
+   ```bash
+   infer run -- make
+   ```
+
 2. **SonarQube**:
-Configurar el proyecto en SonarQube para realizar un análisis exhaustivo del código fuente.
+   Configurar el proyecto en SonarQube para realizar un análisis exhaustivo del código fuente.
+
+
+## **Ejemplo de imagen cifrada**
+
+La siguiente es una imagen de muestra utilizada para las pruebas de cifrado y descifrado en este proyecto:
+
+![Imagen Satelital](Imagen.jpg)
+
+## **Capturas de salida del cifrado y descifrado**
+
+A continuación, se muestran las salidas de consola durante el proceso de cifrado y descifrado de la imagen:
+
+1. **Cifrado de la imagen**:
+   ```bash
+   time ./main encrypt image3.tif out.enc
+   
+   input_path=image3.tif
+   output_path=out.enc
+   Encrypted image
+   
+   real    0m3,822s
+   user    0m2,532s
+   sys     0m1,260s
+   ```
+
+2. **Descifrado de la imagen**:
+   ```bash
+   time ./main decrypt out.enc newImg3.tif
+   
+   input_path=out.enc
+   output_path=newImg3.tif
+   Decrypted image
+   
+   real    0m41,967s
+   user    0m41,012s
+   sys     0m0,836s
+   ```
 
 ## **Autores**
 
@@ -169,7 +195,3 @@ Configurar el proyecto en SonarQube para realizar un análisis exhaustivo del c�
 - **Sebastian Urrea**
 - **Haider Fonseca**
 - **Daniel Perea**
-
----
-
-Este README proporciona una guía detallada para utilizar, compilar, y entender el proyecto con una estructura bien definida para cada parte del código.
