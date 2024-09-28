@@ -74,35 +74,48 @@ void Satellite::setGroundStation(GroundStation &groundStation) {
 // Función para cifrar y almacenar una imagen
 void Satellite::encrypt(const std::string& inputPath, const std::string& outputPath) {
     std::string aesKey = generateKey();  // Generar una clave AES aleatoria
-    encryptImg(inputPath, outputPath, aesKey);  // Cifrar la imagen usando la clave AES
+    encryptImg(inputPath, outputPath, aesKey);  // Cifrar la imagen usando la clave 
     std::string imgName = getImgName(outputPath);  // Obtener el nombre del archivo cifrado
     this->groundStation->storeImgKeyPair(imgName);  // Almacenar la relación entre imagen y clave en GroundStation
 }
 
 // Función para cifrar una imagen usando AES
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath, const std::string& aesKey) {
-    // Leer la imagen en binario
+   // Leer la imagen en binario
+    if (!std::filesystem::exists(outputPath)) {
+        std::filesystem::create_directory(outputPath);
+    }
     std::ifstream inputFile(inputPath, std::ios::binary);
     inputFile.seekg(0, std::ios::end);  // Mover el puntero del archivo al final para obtener el tamaño
-    Cipher::uint fileSize = inputFile.tellg();  // Obtener el tamaño del archivo
+    Cipher::uint fileSize = inputFile.tellg(); // Obtener el tamaño del archivo
     inputFile.seekg(0, std::ios::beg);  // Devolver el puntero al inicio
 
     // Crear un arreglo de bytes para almacenar la imagen
-    Cipher::uchar* data = new unsigned char[fileSize];
-    inputFile.read((char*) data, fileSize);  // Leer el archivo de imagen en el arreglo
-    inputFile.close();  // Cerrar el archivo
-
+    Cipher::uint bufferSize = 1100;
+    Cipher::uchar* buffer = new unsigned char[bufferSize];
+    
     // Crear un cifrador AES con CTR y SHA-256
     Cipher cipher("aes-256-ctr", "sha256");
 
-    // Convertir la imagen a base64
-    std::string imgInBase64 = cipher.encode_base64(data, fileSize); 
+    for (unsigned int i = 0; i < fileSize; i+= bufferSize){
+        size_t bytesToRead = bufferSize;
+        if (i + bufferSize > fileSize) {
+            bytesToRead = fileSize - i;
+        }
 
-    // Cifrar la imagen usando la clave AES
-    std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
+        inputFile.seekg(i, std::ios::beg);
+        inputFile.read((char*) buffer, bytesToRead);
 
-    // Guardar la imagen cifrada en el archivo de salida
-    cipher.file_write(outputPath, encryptedImg, true);
+        // Convertir la imagen a base64
+        std::string imgInBase64 = cipher.encode_base64(buffer, bytesToRead); 
+
+        // Cifrar la imagen usando la clave AES
+        std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
+        
+        std::string path = outputPath + "/" + std::to_string(i) + ".airReinforcement";
+        cipher.file_write(path, encryptedImg);
+    }
+
 }
 
 // Obtener el nombre del archivo a partir del path
