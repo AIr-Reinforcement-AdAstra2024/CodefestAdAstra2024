@@ -4,7 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <random>
-
+#include <algorithm> 
 #include "GroundStation.hpp"
 #include "cipher.h"
 
@@ -180,23 +180,34 @@ void GroundStation::insertLine(const std::string& filename, const std::string& l
 void GroundStation::decryptImg(std::string inputPath, std::string outputPath, std::string aesKey) {
     // Crear un objeto Cipher para descifrar la imagen
     Cipher cipher("aes-256-ctr", "sha256");
-
+    
     // Leer la imagen cifrada del archivo y almacenarla en un string
-    std::string text = cipher.file_read(inputPath);
+    
 
-    // Decifrar la imagen usando la llave AES
-    std::string decryptedImg = cipher.decrypt(text, aesKey);
-
-    // Convertir la imagen decifrada a bytes
-    Cipher::kv1_t dataNew = cipher.decode_base64(decryptedImg);
-
-    // Extraer los bytes y su tamaño
-    unsigned char* dataNewPointer = dataNew.first;
-    unsigned int dataNewLength = dataNew.second; 
-
-    // Guardar los bytes en el archivo de salida
+    std::vector<std::string> filePaths;
+    for (const auto& entry : std::filesystem::directory_iterator(inputPath)) {
+            if (entry.is_regular_file()) {  // Check if it's a regular file
+                filePaths.push_back(entry.path().string());  // Store the path as a string
+            }
+        }
     std::ofstream outputFile(outputPath, std::ios::binary);
-    outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
+    std::sort(filePaths.begin(), filePaths.end());  // Sort filePaths alphabetically
+    for (const auto& filePath : filePaths) {
+        std::string text = cipher.file_read(filePath);
+        std::string decryptedImg = cipher.decrypt(text, aesKey);
+        Cipher::kv1_t dataNew = cipher.decode_base64(decryptedImg);
+
+        // Extraer los bytes y su tamaño
+        unsigned char* dataNewPointer = dataNew.first;
+        unsigned int dataNewLength = dataNew.second; 
+
+        // Guardar los bytes en el archivo de salida
+        
+        outputFile.write(reinterpret_cast<const char*>(dataNewPointer), dataNewLength);
+    }
+
+    outputFile.close();
+    
 }
 
 // Código comentado para desencriptar con RSA (no utilizado actualmente)

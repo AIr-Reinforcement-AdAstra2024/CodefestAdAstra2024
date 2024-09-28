@@ -91,7 +91,7 @@ void Satellite::encryptImg(const std::string& inputPath, const std::string& outp
     inputFile.seekg(0, std::ios::beg);  // Devolver el puntero al inicio
 
     // Crear un arreglo de bytes para almacenar la imagen
-    Cipher::uint bufferSize = 1100;
+    Cipher::uint bufferSize = 3000000000;
     Cipher::uchar* buffer = new unsigned char[bufferSize];
     
     // Crear un cifrador AES con CTR y SHA-256
