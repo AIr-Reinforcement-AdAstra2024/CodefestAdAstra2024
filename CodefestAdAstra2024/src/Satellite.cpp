@@ -10,7 +10,7 @@
 #include <openssl/bio.h> // Para el manejo de BIOs
 #include <openssl/buffer.h>
 #include <openssl/err.h>
-
+#include <cstdio> 
 #include "Satellite.hpp"
 #include "GroundStation.hpp"
 #include "cipher.h"
@@ -81,54 +81,58 @@ void Satellite::encrypt(const std::string& inputPath, const std::string& outputP
 
 // Función para cifrar una imagen usando AES
 void Satellite::encryptImg(const std::string& inputPath, const std::string& outputPath, const std::string& aesKey) {
-    // Leer la imagen en binario
-    std::ifstream inputFile(inputPath, std::ios::binary);
-    inputFile.seekg(0, std::ios::end);  // Mover el puntero del archivo al final para obtener el tamaño
-    Cipher::uint fileSize = inputFile.tellg(); // Obtener el tamaño del archivo
-    inputFile.seekg(0, std::ios::beg);  // Devolver el puntero al inicio
+    // Definir el tamaño del bloque (chunk) a leer en cada iteración
+    const std::size_t chunkSize = 64 * 1024;  // 64 KB por bloque
 
-    // Crear un arreglo de bytes para almacenar la imagen
-    Cipher::uint bufferSize = 16;
-    Cipher::uchar* buffer = new unsigned char[bufferSize];
-    
+    // Abrir el archivo de entrada en modo binario usando fopen
+    FILE* inputFile = fopen(inputPath.c_str(), "rb");
+    if (!inputFile) {
+        std::cerr << "Error al abrir el archivo de entrada: " << inputPath << std::endl;
+        return;
+    }
+
+    // Abrir el archivo de salida en modo binario usando fopen
+    FILE* outputFile = fopen(outputPath.c_str(), "wb");
+    if (!outputFile) {
+        std::cerr << "Error al abrir el archivo de salida: " << outputPath << std::endl;
+        fclose(inputFile);  // Cerrar el archivo de entrada antes de salir
+        return;
+    }
+
+    // Crear un buffer para almacenar los bloques de lectura
+    std::vector<char> buffer(chunkSize);
+
     // Crear un cifrador AES con CTR y SHA-256
     Cipher cipher("aes-256-ctr", "sha256");
 
-    for (unsigned int i = 0; i < fileSize; i+= bufferSize){
-        size_t bytesToRead = bufferSize;
-        if (i + bufferSize > fileSize) {
-            bytesToRead = fileSize - i;
+    // Leer el archivo de entrada en bloques
+    while (!feof(inputFile)) {
+        size_t bytesRead = fread(buffer.data(), 1, buffer.size(), inputFile);  // Leer hasta 'chunkSize' bytes
+
+        if (bytesRead > 0) {
+            // Convertir el bloque de datos leídos a base64
+            std::string imgInBase64 = cipher.encode_base64(reinterpret_cast<unsigned char*>(buffer.data()), bytesRead);
+
+            // Cifrar el bloque usando la clave AES
+            std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
+
+            // Eliminar los saltos de línea de la cadena cifrada (si es necesario)
+            std::stringstream ss(encryptedImg);
+            std::string token, result;
+            while (std::getline(ss, token, '\n')) {
+                result += token;  // Quitar saltos de línea
+            }
+
+            // Escribir el bloque cifrado en el archivo de salida
+            fwrite(result.c_str(), 1, result.size(), outputFile);
         }
-
-        inputFile.seekg(i, std::ios::beg);
-        inputFile.read((char*) buffer, bytesToRead);
-
-        // Convertir la imagen a base64
-        std::string imgInBase64 = cipher.encode_base64(buffer, bytesToRead); 
-
-        // Cifrar la imagen usando la clave AES
-        std::string encryptedImg = cipher.encrypt(imgInBase64, aesKey);
-        //encryptedImg = encryptedImg.substr(0, encryptedImg.length());
-
-
-        std::vector<std::string> tokens;
-        std::stringstream ss(encryptedImg);
-        std::string token;
-
-        while (std::getline(ss, token, '\n')) {
-            tokens.push_back(token);
-        }
-        std::string result;
-        for (const auto& s : tokens) {
-            result += s;
-        }
-
-        insertLine(outputPath, result);
     }
-    
-    // Leer el archivo de imagen en el arreglo
-    inputFile.close();  // Cerrar el archivo
+
+    // Cerrar los archivos al finalizar
+    fclose(inputFile);
+    fclose(outputFile);
 }
+
 
     
 
