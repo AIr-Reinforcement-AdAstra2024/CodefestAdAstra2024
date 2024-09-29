@@ -23,7 +23,6 @@ Este proyecto implementa una solución criptográfica para el cifrado y descifra
   - [**Capturas de salida del cifrado y descifrado**](#capturas-de-salida-del-cifrado-y-descifrado)
   - [**Autores**](#autores)
 
-
 ## **Descripción del Proyecto**
 
 Este proyecto aborda el problema de **ciberseguridad en misiones satelitales**. El objetivo es diseñar e implementar algoritmos de cifrado y descifrado de imágenes satelitales usando llaves dinámicas y cumpliendo con los requerimientos de sistemas embebidos de baja capacidad.
@@ -36,13 +35,14 @@ La solución está diseñada para ejecutarse en un **Jetson Nano** y hace uso de
 - **Librerías**:
   - `libcrypto` para el cifrado/descifrado usando **OpenSSL**.
 - **Lenguaje**: C/C++
-- **Herramientas**: 
+- **Herramientas**:
   - CMake para la compilación.
   - Jetson Nano con Ubuntu (ya configurado en la competencia).
 
 ## **Instalación**
 
 1. Clonar este repositorio:
+
    ```bash
    git clone https://github.com/AIr-Reinforcement-AdAstra2024/CodefestAdAstra2024
    cd CodefestAdAstra2024
@@ -74,6 +74,7 @@ Este comando generará el ejecutable `CodefestAdAstra2024.sh` dentro del directo
 Existen varias opciones para compilar el código en Windows. A continuación, se detallan algunos métodos:
 
 - **MinGW**:
+
   1. Instalar `mingw32-make`.
   2. Navegar a la carpeta del proyecto: `CodefestAdAstra2024/build`.
   3. Ejecutar:
@@ -82,6 +83,7 @@ Existen varias opciones para compilar el código en Windows. A continuación, se
      ```
 
 - **Visual Studio**:
+
   1. Abrir la carpeta del proyecto en Visual Studio.
   2. Ejecutar `nmake` desde la terminal.
 
@@ -144,6 +146,7 @@ El manejo de llaves dinámicas es crucial en este proyecto. Las llaves no se alm
 Para garantizar la calidad del código, se recomienda el uso de las herramientas de análisis estático **Facebook Infer** y **SonarQube**. Estas herramientas permiten identificar posibles errores o vulnerabilidades en el código.
 
 1. **Facebook Infer**:
+
    ```bash
    infer run -- make
    ```
@@ -151,38 +154,39 @@ Para garantizar la calidad del código, se recomienda el uso de las herramientas
 2. **SonarQube**:
    Configurar el proyecto en SonarQube para realizar un análisis exhaustivo del código fuente.
 
-
 ## **Ejemplo de imagen cifrada**
 
 La siguiente es una imagen de muestra utilizada para las pruebas de cifrado y descifrado en este proyecto:
 
-![Imagen Satelital](Imagen.jpg)
+![Imagen Satelital](resources/Imagen.jpg)
 
 ## **Capturas de salida del cifrado y descifrado**
 
 A continuación, se muestran las salidas de consola durante el proceso de cifrado y descifrado de la imagen:
 
 1. **Cifrado de la imagen**:
+
    ```bash
    time ./main encrypt image3.tif out.enc
-   
+
    input_path=image3.tif
    output_path=out.enc
    Encrypted image
-   
+
    real    0m3,822s
    user    0m2,532s
    sys     0m1,260s
    ```
 
 2. **Descifrado de la imagen**:
+
    ```bash
    time ./main decrypt out.enc newImg3.tif
-   
+
    input_path=out.enc
    output_path=newImg3.tif
    Decrypted image
-   
+
    real    0m41,967s
    user    0m41,012s
    sys     0m0,836s
