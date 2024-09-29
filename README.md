@@ -44,7 +44,7 @@ La solución está diseñada para ejecutarse en un **Jetson Nano** y hace uso de
 
 1. Clonar este repositorio:
    ```bash
-   git clone https://github.com/tuusuario/CodefestAdAstra2024.git
+   git clone https://github.com/AIr-Reinforcement-AdAstra2024/CodefestAdAstra2024
    cd CodefestAdAstra2024
    ```
 
